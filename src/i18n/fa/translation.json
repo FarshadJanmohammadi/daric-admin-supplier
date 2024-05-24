@@ -28,5 +28,9 @@
 
     "suppliers_manage_modal": {
         "title": "افزودن تامین‌‌کنندگان"
+    },
+
+    "minimize_tab": {
+        "add_supplier_modal": "مدال افزودن تامین‌ کننده"
     }
 }

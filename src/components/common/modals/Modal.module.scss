@@ -13,6 +13,14 @@
 	&.transparent .modal {
 		box-shadow: theme("boxShadow.section");
 	}
+
+	&.minimize {
+	display: none !important;
+	}
+
+	&:not(.minimize) {
+	display: block !important;
+	}
 }
 
 .container {

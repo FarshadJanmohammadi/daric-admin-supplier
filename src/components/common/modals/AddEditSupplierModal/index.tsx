@@ -1,5 +1,6 @@
 import { initialAddEditSupplierInputs } from '@/constant';
 import useModalStore from '@/features/useModalStore';
+import useUiStore from '@/features/useUiStore';
 import useInputs from '@/hooks/useInputs';
 import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,28 +13,55 @@ interface AddEditSupplierModalProps extends IBaseModalConfiguration {}
 const AddEditSupplierModal = forwardRef<HTMLDivElement, AddEditSupplierModalProps>((props, ref) => {
     const { t } = useTranslation();
 
-    const { setAddSupplierModal } = useModalStore((state) => state);
+    const { setAddSupplierModal, addSupplierModal } = useModalStore((state) => state);
+
+    const { minimizeTab, setMinimizeTab } = useUiStore((store) => store);
+
+    console.log(minimizeTab, 'minimizeTab');
 
     const { inputs, setFieldValue, setFieldsValue } =
         useInputs<SuppliersManage.IAddEditSupplierInputs>(initialAddEditSupplierInputs);
 
     const onCloseModal = () => {
         setAddSupplierModal(null);
+        setMinimizeTab(minimizeTab.filter((item) => item !== 'add_supplier_modal'));
     };
 
     const onClear = () => {
         setFieldsValue(initialAddEditSupplierInputs);
     };
 
+    const onMinimize = () => {
+        if (minimizeTab.includes('add_supplier_modal')) {
+            setAddSupplierModal({ minimize: true });
+        } else {
+            setMinimizeTab(['add_supplier_modal']);
+            setAddSupplierModal({ minimize: true });
+        }
+    };
+
     return (
-        <Modal size='sm' moveable onClose={onCloseModal} {...props} ref={ref}>
+        <Modal
+            minimize={addSupplierModal?.minimize}
+            moveable={addSupplierModal?.moveable}
+            size='sm'
+            onClose={onCloseModal}
+            {...props}
+            ref={ref}
+        >
             <div className='flex flex-col'>
-                <Header label={t('suppliers_manage_modal.title')} onClose={onCloseModal} onClear={onClear} />
+                <Header
+                    label={t('suppliers_manage_modal.title')}
+                    onClose={onCloseModal}
+                    onClear={onClear}
+                    onMinimize={onMinimize}
+                />
                 <Form
                     inputs={inputs}
                     setInputs={setFieldsValue}
                     setInput={setFieldValue}
                     setAddSupplierModal={setAddSupplierModal}
+                    onCloseModal={onCloseModal}
                 />
             </div>
         </Modal>

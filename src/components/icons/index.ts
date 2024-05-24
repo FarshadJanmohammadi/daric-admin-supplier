@@ -11,6 +11,7 @@ import GearSVG from './gear.svg?react';
 import GridSVG from './grid.svg?react';
 import HelpSVG from './help.svg?react';
 import MagnifierSVG from './magnifier.svg?react';
+import MinimizeSVG from './minimize.svg?react';
 import MoonSVG from './moon.svg?react';
 import OutBoxSVG from './out-box.svg?react';
 import PalletColorSVG from './pallet-color.svg?react';
@@ -37,6 +38,7 @@ export {
     GridSVG,
     HelpSVG,
     MagnifierSVG,
+    MinimizeSVG,
     MoonSVG,
     OutBoxSVG,
     PalletColorSVG,

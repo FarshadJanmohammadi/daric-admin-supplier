@@ -14,9 +14,10 @@ interface IFormProps {
         value: SuppliersManage.IAddEditSupplierInputs[K],
     ) => void;
     setAddSupplierModal: (state: IAddSupplierModal | null) => void;
+    onCloseModal: () => void;
 }
 
-const Form = ({ inputs, setInput, setAddSupplierModal }: IFormProps) => {
+const Form = ({ inputs, setInput, onCloseModal }: IFormProps) => {
     return (
         <div className='flex flex-col gap-24 bg-background-200 p-16 py-24 dark:bg-dark-background-200'>
             <Input
@@ -60,7 +61,7 @@ const Form = ({ inputs, setInput, setAddSupplierModal }: IFormProps) => {
 
             <div className='flex items-center gap-16 pt-16'>
                 <button
-                    onClick={() => setAddSupplierModal(null)}
+                    onClick={onCloseModal}
                     className=' rounded-md border border-brand-200 px-32 py-10 text-base font-semibold text-brand-200 dark:border-r-dark-brand-200 dark:text-dark-brand-200'
                 >
                     انصراف
