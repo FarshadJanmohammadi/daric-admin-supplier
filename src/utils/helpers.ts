@@ -1,4 +1,6 @@
 import dayjs from '@/libs/dayjs';
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export const getDeviceColorSchema = (): 'dark' | 'light' => {
     try {
@@ -39,4 +41,8 @@ export const sepNumbers = (num: string | undefined): string => {
     const formattedIntegerPart: string = num?.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     return formattedIntegerPart;
+};
+
+export const cn = (...args: ClassesValue[]) => {
+    return twMerge(clsx(args));
 };

@@ -12,3 +12,9 @@ declare type ClassesValue =
 declare type RecordClasses<T extends string> = Partial<Record<T, ClassesValue>>;
 
 declare type ElementType<T extends readonly unknown[]> = T extends readonly (infer U)[] ? U : never;
+
+declare interface IBaseModalConfiguration {
+    moveable?: boolean;
+    animation?: boolean;
+    callbackFunction?: () => void;
+}

@@ -1,0 +1,54 @@
+.root {
+	position: fixed;
+	width: 100dvw;
+	height: 100dvh;
+	top: 0;
+	left: 0;
+	z-index: 9999;
+
+	&:not(.transparent) {
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+
+	&.transparent .modal {
+		box-shadow: theme("boxShadow.section");
+	}
+}
+
+.container {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.modal {
+	position: absolute;
+	top: 14%;
+	left: 50%;
+	max-width: 95%;
+	max-height: 95%;
+	border-radius: 8px;
+	overflow: hidden;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+
+	&.lg {
+		width: 114rem;
+	}
+
+	&.md {
+		width: 80rem;
+	}
+
+	&.sm {
+		width: 50rem;
+	}
+
+	&.xs {
+		width: 40rem;
+	}
+
+	&.xxs {
+		width: 30rem;
+	}
+}

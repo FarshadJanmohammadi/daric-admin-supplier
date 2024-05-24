@@ -206,6 +206,17 @@ export default {
             44: '4.4rem',
             48: '4.8rem',
         },
+
+        boxShadow: {
+            none: 'none',
+            tooltip: '0px 0px 2px 0px rgba(0, 0, 0, 0.16)',
+            sm: '0px 1px 2px 0px rgba(0, 0, 0, 0.1)',
+            DEFAULT: '0px 4px 4px -1px rgba(0, 0, 0, 0.1)',
+            md: '0px 8px 8px -1 rgba(0, 0, 0, 0.1)',
+            lg: '0px 12px 12px 0px rgba(0, 0, 0, 0.1)',
+            card: '0px 2px 11px 0px rgba(0, 0, 0, 0.05)',
+            section: 'rgba(0, 0, 0, 0.1) 0px 2px 9px 2px',
+        },
     },
     plugins: [],
 };

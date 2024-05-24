@@ -3,21 +3,21 @@
     const LOCAL_ENV = {
         API_PATH: 'http://192.168.90.7:8090',
         API_LANG: 'Fa',
-        APP_NAME: 'داشبورد آنالیزی داریک',
+        APP_NAME: 'سامانه تامین کنندگان داریک',
     };
 
     /* DEVELOPMENT */
     const DEV_ENV = {
         API_PATH: 'http://192.168.90.7:8090',
         API_LANG: 'Fa',
-        APP_NAME: 'داشبورد آنالیزی داریک',
+        APP_NAME: 'سامانه تامین کنندگان داریک',
     };
 
     /* PRODUCTION */
     const PRODUCTION_ENV = {
         API_PATH: 'http://sandbox.daricgold.com:8090',
         API_LANG: 'Fa',
-        APP_NAME: 'داشبورد آنالیزی داریک',
+        APP_NAME: 'سامانه تامین کنندگان داریک',
     };
 
     const URLIsValid = (url) => {

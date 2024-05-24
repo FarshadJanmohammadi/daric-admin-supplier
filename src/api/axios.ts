@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-// import routes from 'routes';
+import routes from 'routes';
 
 const axiosBase = axios.create();
 
@@ -79,11 +79,11 @@ export const onUnauthorize = () => {
 
         const url = new URL(window.location.href);
 
-        // url.pathname = routes.auth.logout;
+        url.pathname = routes.auth.logout;
         window.location.replace(url.toString());
     } catch (e) {
-        // window.location.pathname = routes.auth.logout;
+        window.location.pathname = routes.auth.logout;
     }
 };
 
-export { axiosBase, AxiosError };
+export { AxiosError, axiosBase };

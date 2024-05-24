@@ -5,8 +5,8 @@ import ArrowRightSVG from './arrow-right.svg?react';
 import ArrowUpSVG from './arrow-up.svg?react';
 import DaricFaSVG from './daric-fa.svg?react';
 import DevicesSVG from './devices.svg?react';
-// import ExcelSVG from './excel.svg?react';
 import EditSVG from './edit.svg?react';
+import EraserSVG from './eraser.svg?react';
 import GearSVG from './gear.svg?react';
 import GridSVG from './grid.svg?react';
 import HelpSVG from './help.svg?react';
@@ -21,6 +21,7 @@ import RemainClockSVG from './remain-clock.svg?react';
 import SunSVG from './sun.svg?react';
 import TrashSVG from './trash.svg?react';
 import XFillSVG from './x-fill.svg?react';
+import XSVG from './x.svg?react';
 
 export {
     AlarmSVG,
@@ -31,7 +32,7 @@ export {
     DaricFaSVG,
     DevicesSVG,
     EditSVG,
-    // ExcelSVG,
+    EraserSVG,
     GearSVG,
     GridSVG,
     HelpSVG,
@@ -46,4 +47,5 @@ export {
     SunSVG,
     TrashSVG,
     XFillSVG,
+    XSVG,
 };

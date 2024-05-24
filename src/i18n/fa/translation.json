@@ -15,7 +15,7 @@
     },
     "pages": {
         "dashboard": "داشبورد",
-        "suppliers-manage": "مدیریت تامین کنندگان"
+        "suppliers_manage": "مدیریت تامین کنندگان"
     },
 
     "suppliers_manage": {
@@ -24,5 +24,9 @@
         "national_code_column": "شماره ملی",
         "mobile_number_column": "شماره موبایل",
         "action_column": "عملیات"
+    },
+
+    "suppliers_manage_modal": {
+        "title": "افزودن تامین‌‌کنندگان"
     }
 }

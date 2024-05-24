@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const Spinner = () => (
-    <div className='flex min-h-screen flex-col items-center justify-center'>
+    <div className='flex min-h-screen flex-col items-center justify-center bg-background-100 dark:bg-dark-background-100'>
         <svg
             className='animate-pulse'
             version='1.1'
@@ -12,8 +12,8 @@ export const Spinner = () => (
             x='0px'
             y='0px'
             viewBox='0 0 1920 1080'
-            width='20rem'
-            height='10rem'
+            width='30rem'
+            height='20rem'
         >
             <g>
                 <g>
@@ -208,11 +208,9 @@ const Splashscreen = ({ children }: SplashscreenProps) => {
 
     const { appLoading } = useContext(AppContext);
 
+    console.log(appLoading, 'appLoading');
+
     const languageIsReady = ready && resolvedLanguage === 'fa';
-
-    console.log(languageIsReady, 'languageIsReady');
-
-    console.log(appLoading, 'apploading');
 
     return (
         <>

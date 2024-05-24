@@ -5,7 +5,7 @@ import styles from './Input.module.scss';
 interface InputProps
     extends Omit<
         React.InputHTMLAttributes<HTMLInputElement>,
-        'value' | 'prefix' | 'placeholder' | 'onChange' | 'type'
+        'value' | 'prefix' | 'placeholder' | 'onChange' | 'type' | 'id'
     > {
     onChange: (v: string) => void;
     value: string | number | null;
@@ -15,7 +15,8 @@ interface InputProps
     valueSeparator?: boolean;
     inputPlaceholder?: string;
     classes?: RecordClasses<'root' | 'input'>;
-    type: 'text' | 'number';
+    type?: 'text' | 'number';
+    id: string;
 }
 
 const Input = ({
@@ -27,21 +28,25 @@ const Input = ({
     // valueSeparator,
     // inputPlaceholder,
     classes,
-    type,
+    type = 'text',
+    id,
 }: InputProps) => {
     const { theme } = useTheme();
+
+    const isActive = value !== '' && value !== null;
 
     return (
         <div className={clsx([classes?.root, styles.root], theme === 'dark' && styles.dark)}>
             <input
                 value={value ?? ''}
                 onChange={(e) => onChange(e.target.value)}
-                id='inputID'
+                id={id}
                 type={type}
                 dir='rtl'
-                className={clsx([classes?.input, styles.input], value !== '' && value !== null && styles.active)}
+                autoComplete='off'
+                className={clsx([classes?.input, styles.input], isActive && styles.active)}
             ></input>
-            <label htmlFor='inputID' className={styles.placeholder}>
+            <label htmlFor={id} className={styles.placeholder}>
                 {placeholder}
             </label>
         </div>
