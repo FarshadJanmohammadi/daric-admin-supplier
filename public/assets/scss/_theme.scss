@@ -1,0 +1,11 @@
+html {
+	--scrollbar-size: 8px;
+
+	&.dark {
+		@import "theme/dark";
+	}
+
+	&:not(.dark) {
+		@import "theme/light";
+	}
+}

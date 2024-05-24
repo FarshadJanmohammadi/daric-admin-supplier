@@ -1,0 +1,28 @@
+{
+    "common": {},
+    "sidebar": {
+        "dashboard": "داشبورد",
+        "profile": "پروفایل",
+        "setting": "تنظیمات",
+        "help": "راهنما",
+        "logout": "خروج",
+        "sessions": "تاریخچه ورود و خروج",
+        "suppliers-manage": "مدیریت تامین کنندگان"
+    },
+
+    "footer": {
+        "copyright": "© کلیه حقوق این وب سایت متعلق به داریکءء می باشد."
+    },
+    "pages": {
+        "dashboard": "داشبورد",
+        "suppliers-manage": "مدیریت تامین کنندگان"
+    },
+
+    "suppliers_manage": {
+        "id_column": "ردیف",
+        "name_column": "نام و نام‌خانوادگی",
+        "national_code_column": "شماره ملی",
+        "mobile_number_column": "شماره موبایل",
+        "action_column": "عملیات"
+    }
+}

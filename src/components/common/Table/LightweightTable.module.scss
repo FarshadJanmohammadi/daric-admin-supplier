@@ -1,0 +1,71 @@
+.table {
+--table-header-bg-color: theme("colors.background.300");
+--table-text-color: theme("colors.text.100");
+--table-body-row-odd-bg-color: theme("colors.background.100");
+--table-body-row-even-bg-color: theme("colors.background.300");
+
+&.dark {
+--table-header-bg-color: theme("colors.dark.background.300");
+--table-text-color: theme("colors.dark.text.100");
+--table-body-row-odd-bg-color: theme("colors.dark.background.100");
+--table-body-row-even-bg-color: theme("colors.dark.background.300");
+}
+	width: 100%;
+	height: 100%;
+	direction: rtl;
+	display: flex;
+	flex-direction: column;
+}
+
+.thead,
+.tbody {
+	display: block;
+	overflow: auto;
+
+	.tr {
+		display: table;
+		table-layout: fixed;
+		width: 100%;
+		height: 4rem;
+
+		background-color: var(--table-body-row-odd-bg-color) !important;
+		color: var(--table-text-color) !important;
+
+		.th,
+		.td {
+			vertical-align: middle;
+			text-align: center;
+		}
+	}
+}
+
+.thead {
+	.tr > .th {
+		background-color: var(--table-header-bg-color) !important;
+		font-size: 1.2rem;
+		font-weight: 400;
+		color: var(--table-text-color) !important;
+	}
+}
+
+.tbody {
+	height: calc(100% - 4rem);
+	color: var(--table-text-color) !important;
+
+
+	.tr {
+		height: 6rem;
+
+
+		&:nth-child(2n) {
+			background-color: var(--table-body-row-even-bg-color) !important;
+			color: var(--table-text-color) !important;
+
+		}
+
+		& > .td {
+			font-size: 1.2rem;
+			color: var(--table-text-color) !important;
+		}
+	}
+}

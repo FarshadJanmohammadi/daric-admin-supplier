@@ -1,0 +1,19 @@
+html {
+	font-size: 55%;
+
+	@include desktopXL {
+		font-size: 62.5%;
+	}
+
+	@media only screen and (min-width: 2560px) {
+		font-size: 125%;
+	}
+
+	@media only screen and (min-width: 3840px) {
+		font-size: 150%;
+	}
+
+	@media only screen and (min-width: 4096px) {
+		font-size: 175%;
+	}
+}
