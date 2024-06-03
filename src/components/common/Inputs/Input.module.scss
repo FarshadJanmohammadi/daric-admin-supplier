@@ -4,15 +4,15 @@
 --input-focus-color: theme("colors.brand.200");
 --input-text-color: theme("colors.text.100");
 --input-placeholder-color: theme("colors.text.200");
---input-placeholder-bg-color:theme("colors.background.200");
---input-bg-color: theme("colors.background.input");
+--input-placeholder-bg-color:theme("colors.transparent");
+--input-bg-color: theme("colors.transparent");
 
 &.dark {
     --input-focus-color: theme("colors.dark.brand.200");
     --input-text-color: theme("colors.dark.text.100");
     --input-placeholder-color: theme("colors.dark.text.200"); 
-    --input-placeholder-bg-color:theme("colors.dark.background.200");
-    --input-bg-color: theme("colors.dark.background.input");
+    --input-placeholder-bg-color:theme("colors.transparent");
+    --input-bg-color: theme("colors.transparent");
 
 }
 
@@ -31,9 +31,7 @@ border: 1px solid transparent;
 transition: border-color 100ms ease;
 
 
-    &:has(.input:focus) {
-        border:1px solid var(--input-focus-color)
-    }
+   
 
 
 }
@@ -55,14 +53,17 @@ transition: border-color 100ms ease;
     position: absolute;
     color:var(--input-placeholder-color);
     right: var(--input-padding);
-    transition: all 0.25s ease-in;
+    transition: all 0.2s ease-in;
     margin-right: 1rem;
+    padding: 4px;
+    font-size: 1.6rem;
+
+    &.placeholderActive {
+        transform: translateY(calc(-1 * var(--input-padding) - 1.2rem));
+        font-size: 1.4rem;
+        color:var(--input-placeholder-color);
+        background-color: var(--input-placeholder-bg-color);
+    }
+
 }
 
-.input:is(.active) + .placeholder {
-    transform: translateY(calc(-1 * var(--input-padding) - 1.2rem));
-    font-size: 1.4rem;
-    color:var(--input-placeholder-color);
-    background-color: var(--input-placeholder-bg-color);
-
-}

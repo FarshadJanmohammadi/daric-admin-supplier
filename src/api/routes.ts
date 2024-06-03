@@ -10,8 +10,13 @@ const createRoute = (origin: keyof typeof BASE_ROUTE, pathname: string): string 
 };
 
 const routes = {
-    Supplier: {
+    supplier: {
         add: createRoute('DASHBOARD_API', 'api/Seller/Admin/AddSeller'),
+        getAll: createRoute('DASHBOARD_API', 'Admin/GetActivePanels'),
+    },
+
+    auth: {
+        login: createRoute('DASHBOARD_API', 'Login'),
     },
 };
 

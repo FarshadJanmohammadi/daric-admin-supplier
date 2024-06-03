@@ -1,4 +1,13 @@
 import dayjs from '@/libs/dayjs';
+import {
+    QueryClient,
+    QueryKey,
+    UndefinedInitialDataOptions,
+    useMutation,
+    UseMutationOptions,
+    useQuery,
+} from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -45,4 +54,18 @@ export const sepNumbers = (num: string | undefined): string => {
 
 export const cn = (...args: ClassesValue[]) => {
     return twMerge(clsx(args));
+};
+
+export const createQuery = <TQueryFnData = unknown, TQueryKey extends QueryKey = QueryKey, TError = AxiosError>(
+    initialOptions: UndefinedInitialDataOptions<TQueryFnData, TError, TQueryFnData, TQueryKey>,
+    queryClient?: QueryClient,
+) => {
+    return (options: Partial<typeof initialOptions>) => useQuery({ ...initialOptions, ...options }, queryClient);
+};
+
+export const createMutation = <TData = unknown, TVariables = void, TError = AxiosError, TContext = unknown>(
+    initialOptions: UseMutationOptions<TData, TError, TVariables, TContext>,
+    queryClient?: QueryClient,
+) => {
+    return (options: Partial<typeof initialOptions>) => useMutation({ ...initialOptions, ...options }, queryClient);
 };

@@ -14,8 +14,8 @@ interface InputProps
     separator?: boolean;
     valueSeparator?: boolean;
     inputPlaceholder?: string;
-    classes?: RecordClasses<'root' | 'input'>;
-    type?: 'text' | 'number';
+    classes?: RecordClasses<'root' | 'input' | 'placeholder'>;
+    type?: 'text' | 'number' | 'password';
     id: string;
 }
 
@@ -46,7 +46,7 @@ const Input = ({
                 autoComplete='off'
                 className={clsx([classes?.input, styles.input], isActive && styles.active)}
             ></input>
-            <label htmlFor={id} className={styles.placeholder}>
+            <label htmlFor={id} className={clsx(classes?.placeholder, styles.placeholder)}>
                 {placeholder}
             </label>
         </div>

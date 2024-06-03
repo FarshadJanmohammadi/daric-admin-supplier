@@ -1,6 +1,9 @@
 import { AppContext } from '@/contexts/AppContext';
 import useTheme from '@/hooks/useTheme';
+import pagesRoutes from '@/routes';
+import Cookies from 'js-cookie';
 import { useContext, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type AuthenticationProps = {
     children: React.ReactNode;
@@ -8,6 +11,12 @@ type AuthenticationProps = {
 
 const Authentication = ({ children }: AuthenticationProps) => {
     const { theme } = useTheme();
+
+    const navigate = useNavigate();
+
+    const location = useLocation();
+
+    console.log(location.pathname, 'pat');
 
     const { appLoading, setAppLoading } = useContext(AppContext);
 
@@ -17,6 +26,15 @@ const Authentication = ({ children }: AuthenticationProps) => {
 
     useEffect(() => {
         setAppLoading(false);
+    }, []);
+
+    useEffect(() => {
+        const cookieClientId = Cookies.get('client_id');
+
+        if (!cookieClientId && !location.pathname.includes('/auth')) {
+            console.log('HIiii');
+            navigate(pagesRoutes.auth.logout);
+        }
     }, []);
 
     if (appLoading) return null;

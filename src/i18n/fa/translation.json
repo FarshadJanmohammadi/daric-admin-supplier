@@ -2,12 +2,14 @@
     "common": {},
     "sidebar": {
         "dashboard": "داشبورد",
-        "profile": "پروفایل",
-        "setting": "تنظیمات",
-        "help": "راهنما",
-        "logout": "خروج",
+        "suppliers": "کاربران",
+        "market_live": "لایو بازار",
+        "market_monitoring": "مانیتورینگ بازار",
+        "trades_histories": "تاریخچه معاملات",
+        "tell_trades": "معاملات تلفنی",
         "sessions": "تاریخچه ورود و خروج",
-        "suppliers-manage": "مدیریت تامین کنندگان"
+        "logout": "خروج",
+        "suppliers_online": "سامانه تامین کنندگان"
     },
 
     "footer": {
@@ -32,5 +34,26 @@
 
     "minimize_tab": {
         "add_supplier_modal": "مدال افزودن تامین‌ کننده"
+    },
+
+    "login_page": {
+        "helper_message": "برای ورود به سامانه تامین کنندگان داریکءء اطلاعات کاربری خود را وارد کنید.",
+        "user_name_placeholder": "نام کاربری / کدملی / شماره همراه",
+        "password_placeholder": "رمزعبور",
+        "login": "ورود"
+    },
+
+    "form": {
+        "user_name": "نام کاربری",
+        "password": "رمز عبور"
+    },
+
+    "validation": {
+        "this_field_is_required": "{{type}} را وارد کنید.",
+        "length": "{{type}} را به درستی وارد نمایید."
+    },
+
+    "alerts": {
+        "exit_account_sorry": "از حساب کاربری خود خارج شدید."
     }
 }

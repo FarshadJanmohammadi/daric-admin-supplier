@@ -1,13 +1,15 @@
 import { create } from 'zustand';
 
+export type TMinimizeTab = 'add_supplier_modal';
+
 interface IUiStore {
     // Sidebar
     sidebarToggle: boolean;
     setSidebarToggle: () => void;
 
     //MinimizeTab
-    minimizeTab: Array<string>;
-    setMinimizeTab: (state: Array<string>) => void;
+    minimizeTab: Array<TMinimizeTab>;
+    setMinimizeTab: (state: Array<TMinimizeTab>) => void;
 }
 
 const useUiStore = create<IUiStore>()((set) => ({
@@ -17,7 +19,7 @@ const useUiStore = create<IUiStore>()((set) => ({
 
     //MinimizeTab
     minimizeTab: [],
-    setMinimizeTab: (value: Array<string>) => set(() => ({ minimizeTab: [...value] })),
+    setMinimizeTab: (value: Array<TMinimizeTab>) => set(() => ({ minimizeTab: [...value] })),
 }));
 
 export default useUiStore;

@@ -14,6 +14,7 @@ interface ModalProps extends IBaseModalConfiguration {
     top?: string | number;
     transparent?: boolean;
     onClose: () => void;
+    onMinimize: () => void;
 }
 
 interface ModalHeaderProps {
@@ -30,23 +31,24 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
             portalElement,
             moveable = false,
             transparent = false,
-            minimize = false,
+            minimize,
             children,
             style,
             classes,
             size,
             top,
             onClose,
+            onMinimize,
         },
         ref,
     ) => {
         const rootRef = useRef<HTMLDivElement>(null);
 
-        console.log(minimize, 'minimize');
-
         const modalRef = useRef<HTMLDivElement | null>(null);
 
         const onWindowClick = (e: MouseEvent, removeListener: () => void) => {
+            console.log('hiii');
+            console.log(minimize, 'minimize');
             try {
                 const eModal = modalRef.current;
                 const eRoot = rootRef.current;
@@ -55,8 +57,13 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 const target = (e.target ?? e.currentTarget) as Node;
 
                 if (target && !eModal.contains(target) && eRoot.contains(target)) {
-                    onClose();
-                    removeListener();
+                    if (typeof minimize !== 'boolean') {
+                        onClose();
+                        removeListener();
+                    } else {
+                        onMinimize();
+                        removeListener();
+                    }
                 }
             } catch (e) {
                 //
@@ -90,7 +97,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
             return () => {
                 controller.abort();
             };
-        }, []);
+        }, [minimize]);
 
         useEffect(() => {
             try {

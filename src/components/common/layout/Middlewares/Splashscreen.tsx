@@ -208,8 +208,6 @@ const Splashscreen = ({ children }: SplashscreenProps) => {
 
     const { appLoading } = useContext(AppContext);
 
-    console.log(appLoading, 'appLoading');
-
     const languageIsReady = ready && resolvedLanguage === 'fa';
 
     return (

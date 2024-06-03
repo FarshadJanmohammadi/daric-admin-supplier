@@ -1,10 +1,14 @@
-import Dashboard from '@/pages/Dashboard';
-import Sessions from '@/pages/Sessions';
-import SupplierManage from '@/pages/SupplierManage';
+import { Dashboard, Login, Logout } from '@/pages';
+import MarketLive from '@/pages/MarketLive';
+import MarketMonitoring from '@/pages/MarketMonitoring';
+import Suppliers from '@/pages/Suppliers';
+import TelephoneTrades from '@/pages/TelephoneTrades';
+import TradesHistories from '@/pages/TradesHistories';
 import pagesRoutes from '@/routes';
 import { useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Layout from '../layout';
+import BlankLayout from '../layout/BlankLayout';
 
 const RoutesRegistry = () => {
     const [router] = useState(
@@ -17,12 +21,37 @@ const RoutesRegistry = () => {
                         path: pagesRoutes.dashboard,
                     },
                     {
-                        element: <SupplierManage />,
-                        path: pagesRoutes.supplierManage,
+                        element: <Suppliers />,
+                        path: pagesRoutes.suppliers,
                     },
                     {
-                        element: <Sessions />,
-                        path: pagesRoutes.sessions,
+                        element: <MarketLive />,
+                        path: pagesRoutes.marketLive,
+                    },
+                    {
+                        element: <MarketMonitoring />,
+                        path: pagesRoutes.marketMonitoring,
+                    },
+                    {
+                        element: <TradesHistories />,
+                        path: pagesRoutes.tradesHistories,
+                    },
+                    {
+                        element: <TelephoneTrades />,
+                        path: pagesRoutes.telephoneTrades,
+                    },
+                ],
+            },
+            {
+                element: <BlankLayout />,
+                children: [
+                    {
+                        element: <Login />,
+                        path: pagesRoutes.auth.login,
+                    },
+                    {
+                        element: <Logout />,
+                        path: pagesRoutes.auth.logout,
                     },
                 ],
             },

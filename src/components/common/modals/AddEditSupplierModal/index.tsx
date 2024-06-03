@@ -17,8 +17,6 @@ const AddEditSupplierModal = forwardRef<HTMLDivElement, AddEditSupplierModalProp
 
     const { minimizeTab, setMinimizeTab } = useUiStore((store) => store);
 
-    console.log(minimizeTab, 'minimizeTab');
-
     const { inputs, setFieldValue, setFieldsValue } =
         useInputs<SuppliersManage.IAddEditSupplierInputs>(initialAddEditSupplierInputs);
 
@@ -32,18 +30,17 @@ const AddEditSupplierModal = forwardRef<HTMLDivElement, AddEditSupplierModalProp
     };
 
     const onMinimize = () => {
-        if (minimizeTab.includes('add_supplier_modal')) {
-            setAddSupplierModal({ minimize: true });
-        } else {
-            setMinimizeTab(['add_supplier_modal']);
-            setAddSupplierModal({ minimize: true });
-        }
+        setMinimizeTab(['add_supplier_modal']);
+        setAddSupplierModal({ minimize: true });
     };
+
+    console.log(addSupplierModal?.minimize, 'addSupplierModal?.minimize');
 
     return (
         <Modal
             minimize={addSupplierModal?.minimize}
             moveable={addSupplierModal?.moveable}
+            onMinimize={onMinimize}
             size='sm'
             onClose={onCloseModal}
             {...props}

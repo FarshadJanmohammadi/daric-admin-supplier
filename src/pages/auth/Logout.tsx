@@ -1,18 +1,23 @@
+import pagesRoutes from '@/routes';
 import Cookies from 'js-cookie';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Logout = () => {
-    // const navigate = useNavigate();
+    const { t } = useTranslation();
 
-    useEffect(() => {
+    const navigate = useNavigate();
+
+    useLayoutEffect(() => {
         Cookies.remove('client_id', {
             path: '/',
         });
-        Cookies.remove('role', {
-            path: '/',
-        });
 
-        // navigate(pagesRoute.auth.login);
+        toast.error(t('alerts.exit_account_sorry'));
+
+        navigate(pagesRoutes.auth.login);
     }, []);
 
     return null;
