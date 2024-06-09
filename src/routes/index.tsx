@@ -1,6 +1,7 @@
 const auth = {
     login: '/auth/login',
     logout: '/auth/logout',
+    OTP: '/auth/otp',
 };
 
 const routes = {

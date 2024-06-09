@@ -1,4 +1,5 @@
 import { Dashboard, Login, Logout } from '@/pages';
+import OTP from '@/pages/auth/OTP';
 import MarketLive from '@/pages/MarketLive';
 import MarketMonitoring from '@/pages/MarketMonitoring';
 import Suppliers from '@/pages/Suppliers';
@@ -48,6 +49,10 @@ const RoutesRegistry = () => {
                     {
                         element: <Login />,
                         path: pagesRoutes.auth.login,
+                    },
+                    {
+                        element: <OTP />,
+                        path: pagesRoutes.auth.OTP,
                     },
                     {
                         element: <Logout />,

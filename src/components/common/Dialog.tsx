@@ -18,6 +18,7 @@ interface DialogOptions {
     onOpenChange?: (open: boolean) => void;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useDialog({
     initialOpen = false,
     open: controlledOpen,
@@ -69,6 +70,7 @@ type ContextType =
 
 const DialogContext = React.createContext<ContextType>(null);
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useDialogContext = () => {
     const context = React.useContext(DialogContext);
 

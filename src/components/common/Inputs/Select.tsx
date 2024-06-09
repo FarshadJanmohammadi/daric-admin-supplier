@@ -15,8 +15,17 @@ import {
 } from '@floating-ui/react';
 import clsx from 'clsx';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
-const Select = ({ options, placeholder }: { options: Array<string>; placeholder: string }) => {
+interface ISelectProps {
+    options: Array<{ value: string; label: string }>;
+    placeholder: string;
+    onChange: (...event: unknown[]) => void;
+}
+
+const Select = ({ options, placeholder, onChange }: ISelectProps) => {
+    const { t } = useTranslation();
+
     const [isOpen, setIsOpen] = React.useState(false);
     const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
     const [selectedIndex, setSelectedIndex] = React.useState<number | null>(null);
@@ -57,6 +66,8 @@ const Select = ({ options, placeholder }: { options: Array<string>; placeholder:
         loop: true,
     });
     const typeahead = useTypeahead(context, {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //@ts-expect-error
         listRef: listContentRef,
         activeIndex,
         selectedIndex,
@@ -74,18 +85,16 @@ const Select = ({ options, placeholder }: { options: Array<string>; placeholder:
         click,
     ]);
 
-    const handleSelect = (index: number) => {
+    const handleSelect = (index: number, value?: { value: string; label: string }) => {
         setSelectedIndex(index);
         setIsOpen(false);
+        onChange(value);
     };
 
     const selectedItemLabel = selectedIndex !== null ? options[selectedIndex] : undefined;
 
     return (
         <>
-            {/* <label id='select-label' onClick={() => refs.domReference.current?.focus()}>
-                Select balloon color
-            </label> */}
             <div
                 tabIndex={0}
                 ref={refs.setReference}
@@ -94,7 +103,7 @@ const Select = ({ options, placeholder }: { options: Array<string>; placeholder:
                 className='flex h-48 flex-1 items-center rounded-md bg-background-input px-24 text-text-200 dark:bg-dark-background-input dark:text-dark-text-200'
                 {...getReferenceProps()}
             >
-                {selectedItemLabel || placeholder}
+                {selectedItemLabel ? t(`form.${selectedItemLabel?.label}_select`) : placeholder}
             </div>
             {isOpen && (
                 <FloatingPortal>
@@ -108,9 +117,9 @@ const Select = ({ options, placeholder }: { options: Array<string>; placeholder:
                             className='z-50 rounded-md border border-brand-200/20 bg-background-100 text-text-200 dark:border-dark-brand-200/20 dark:bg-dark-background-100 dark:text-dark-text-200'
                             {...getFloatingProps()}
                         >
-                            {options.map((value, i) => (
+                            {options.map((item, i) => (
                                 <div
-                                    key={value}
+                                    key={item.value}
                                     ref={(node) => {
                                         listRef.current[i] = node;
                                     }}
@@ -129,7 +138,7 @@ const Select = ({ options, placeholder }: { options: Array<string>; placeholder:
                                     {...getItemProps({
                                         // Handle pointer select.
                                         onClick() {
-                                            handleSelect(i);
+                                            handleSelect(i, item);
                                         },
                                         // Handle keyboard select.
                                         onKeyDown(event) {
@@ -145,7 +154,7 @@ const Select = ({ options, placeholder }: { options: Array<string>; placeholder:
                                         },
                                     })}
                                 >
-                                    {value}
+                                    {t(`form.${item.label}_select`)}
                                 </div>
                             ))}
                         </div>

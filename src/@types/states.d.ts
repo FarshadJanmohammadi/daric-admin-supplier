@@ -5,8 +5,14 @@ declare namespace SuppliersManage {
         supplierName: string;
         nationalCode: string;
         mobileNumber: string;
-        active: boolean | null;
-        status: boolean | null;
+        active: {
+            value: string;
+            label: string;
+        };
+        status: {
+            value: string;
+            label: string;
+        };
         guarantee: string;
         cardNumber: string;
     }

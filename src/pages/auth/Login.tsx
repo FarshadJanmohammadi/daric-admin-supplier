@@ -3,6 +3,7 @@ import apiRoutes from '@/api/routes';
 import Button from '@/components/common/Button';
 import { EyeShieldSVG, EyeSVG, SupplierToDaricSVG, XFillSVG, XSVG } from '@/components/icons';
 import pagesRoutes from '@/routes';
+import { errorMessage } from '@/utils/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -63,12 +64,15 @@ const Login = () => {
 
             if (response.status !== 200 || !data.isSuccess) {
                 toast.error(data.message);
-                throw new Error(data.validationErrors[0].errors[0] ?? '');
+                if (!data.validationErrors) return;
+                throw new Error(errorMessage(data.validationErrors[0].errors[0]));
             }
 
-            Cookies.set('client_id', data.data.token);
             toast.success(data.message);
-            navigate(pagesRoutes.dashboard);
+
+            Cookies.set('client_id', data.data.token);
+
+            navigate(pagesRoutes.auth.OTP);
         } catch (e) {
             setLoading(false);
         } finally {
@@ -105,7 +109,6 @@ const Login = () => {
                                 )}
                             >
                                 <input
-                                    // onChange={(e) => setValue('userName', e.target.value)}
                                     placeholder={t('login_page.user_name_placeholder')}
                                     {...register('userName')}
                                     className='w-full px-8 py-16'

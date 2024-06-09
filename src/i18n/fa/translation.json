@@ -1,12 +1,16 @@
 {
-    "common": {},
+    "common": {
+        "confirm": "تایید",
+        "cancel": "انصراف",
+        "add": "افزودن"
+    },
     "sidebar": {
         "dashboard": "داشبورد",
         "suppliers": "کاربران",
         "market_live": "لایو بازار",
         "market_monitoring": "مانیتورینگ بازار",
         "trades_histories": "تاریخچه معاملات",
-        "tell_trades": "معاملات تلفنی",
+        "telephone_trades": "معاملات تلفنی",
         "sessions": "تاریخچه ورود و خروج",
         "logout": "خروج",
         "suppliers_online": "سامانه تامین کنندگان"
@@ -40,12 +44,29 @@
         "helper_message": "برای ورود به سامانه تامین کنندگان داریکءء اطلاعات کاربری خود را وارد کنید.",
         "user_name_placeholder": "نام کاربری / کدملی / شماره همراه",
         "password_placeholder": "رمزعبور",
-        "login": "ورود"
+        "login": "تایید و دریافت کد"
+    },
+
+    "otp_page": {
+        "enter_otp": "کد تایید را وارد کنید",
+        "send_otp": "کد {{length}} رقمی به شماره (<span>{{mobileNumber}}</span>) ارسال شد.",
+        "confirm": "تایید و ورود"
     },
 
     "form": {
         "user_name": "نام کاربری",
-        "password": "رمز عبور"
+        "password": "رمز عبور",
+        "supplierName": "نام تامین کننده",
+        "nationalCode": "کدملی",
+        "mobileNumber": "شماره همراه",
+        "active": "نوع فعالسازی",
+        "guarantee": "سقف مجاز",
+        "cardNumber": "شماره ثبت",
+        "status": "وضعیت",
+        "active_select": "فعال",
+        "notActive_select": "غیرفعال",
+        "approve_select": "مجاز",
+        "notApprove_select": "غیرمجاز"
     },
 
     "validation": {

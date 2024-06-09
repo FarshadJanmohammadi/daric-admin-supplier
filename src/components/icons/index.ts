@@ -27,6 +27,7 @@ import PhoneSVG from './phone.svg?react';
 import PlusSVG from './plus.svg?react';
 import PointVerticalSVG from './point-vertical.svg?react';
 import ProfileSVG from './profile.svg?react';
+import RefreshSVG from './refresh.svg?react';
 import RemainClockSVG from './remain-clock.svg?react';
 import ReportsSVG from './reports.svg?react';
 import SunSVG from './sun.svg?react';
@@ -65,6 +66,7 @@ export {
     PlusSVG,
     PointVerticalSVG,
     ProfileSVG,
+    RefreshSVG,
     RemainClockSVG,
     ReportsSVG,
     SunSVG,

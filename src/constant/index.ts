@@ -2,8 +2,8 @@ export const initialAddEditSupplierInputs = {
     supplierName: '',
     nationalCode: '',
     mobileNumber: '',
-    active: null,
-    status: null,
+    active: {},
+    status: {},
     guarantee: '',
     cardNumber: '',
 };

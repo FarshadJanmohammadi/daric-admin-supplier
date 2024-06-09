@@ -1,5 +1,6 @@
 import { AngleDownSVG, AngleUpSVG } from '@/components/icons';
 import useTheme from '@/hooks/useTheme';
+import { dateFormatter, numFormatter, sepNumbers, toFixed } from '@/utils/helpers';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
 import styles from './LightweightTable.module.scss';
@@ -8,34 +9,39 @@ type TSorting<K> = null | { column: IColDef<K>; type: TSortingMethods };
 
 type TValueGetterResult = string | number | boolean;
 
-interface IFValueFormatter<K> {
+interface IValueFormatterAPI<K> {
     row: K;
     rowIndex: number;
     value: TValueGetterResult;
 }
 
-export interface IColDef<K> {
-    colId: string;
-    headerName: string;
-    cellClass?: ClassesValue | ((data: K) => ClassesValue);
-    headerClass?: ClassesValue;
-    hidden?: boolean;
-    width?: number;
-    minWidth?: number;
-    maxWidth?: number;
-    sort?: TSortingMethods | null;
-    sortable?: boolean; // !== false
-    comparator?: (valueA: TValueGetterResult, valueB: TValueGetterResult, rowA: K, rowB: K) => number;
-    onCellClick?: (row: K, e: React.MouseEvent) => void;
-    valueGetter: (row: K, rowIndex: number) => TValueGetterResult;
-    valueFormatter?: (api: IFValueFormatter<K>) => React.ReactNode;
-}
+type TCellValue<K> =
+    | { valueType?: 'separate' | 'percent' | 'decimal' | 'date' | 'time' | 'datetime' | 'abbreviations' }
+    | { valueFormatter?: (api: IValueFormatterAPI<K>) => React.ReactNode };
 
-interface HeaderCellProps<K> extends IColDef<K> {
+type THeaderValue = { headerName: string } | { headerComponent: () => React.ReactNode };
+
+export type IColDef<K> = TCellValue<K> &
+    THeaderValue & {
+        colId: string;
+        cellClass?: ClassesValue | ((data: K) => ClassesValue);
+        headerClass?: ClassesValue;
+        hidden?: boolean;
+        width?: number;
+        minWidth?: number;
+        maxWidth?: number;
+        sort?: TSortingMethods | null;
+        sortable?: boolean;
+        comparator?: (valueA: TValueGetterResult, valueB: TValueGetterResult, rowA: K, rowB: K) => number;
+        onCellClick?: (row: K, e: React.MouseEvent) => void;
+        valueGetter: (row: K, rowIndex: number) => TValueGetterResult;
+    };
+
+type HeaderCellProps<K> = IColDef<K> & {
     onClick?: (e: React.MouseEvent) => void;
     onSortDetect: (type: TSortingMethods) => void;
     sorting: TSorting<K>;
-}
+};
 
 interface RowCellProps<K> {
     column: IColDef<K>;
@@ -49,6 +55,7 @@ interface LightweightTableProps<T extends unknown[], K> {
     columnDefs: Array<IColDef<K>>;
     rowHeight?: number;
     headerHeight?: number;
+    reverseColors?: boolean;
     onRowClick?: (row: K, e: React.MouseEvent) => void;
     onHeaderClick?: (column: IColDef<K>, e: React.MouseEvent) => void;
 }
@@ -57,6 +64,7 @@ const LightweightTable = <T extends unknown[], K = ElementType<T>>({
     columnDefs,
     rowData,
     className,
+    reverseColors,
     rowHeight = 48,
     headerHeight = 48,
     onRowClick,
@@ -132,8 +140,15 @@ const LightweightTable = <T extends unknown[], K = ElementType<T>>({
     }, [rowData, sorting]);
 
     return (
-        <div className={styles.wrapper}>
-            <table className={clsx(styles.table, theme === 'dark' && styles.dark, className)}>
+        <div className={clsx(styles.wrapper)}>
+            <table
+                className={clsx(
+                    styles.table,
+                    theme === 'dark' && styles.dark,
+                    reverseColors && styles.reverseColors,
+                    className,
+                )}
+            >
                 <thead className={styles.thead}>
                     <tr style={{ height: `${headerHeight}px` }} className={styles.tr}>
                         {columnDefs.map((col) => (
@@ -171,7 +186,6 @@ const LightweightTable = <T extends unknown[], K = ElementType<T>>({
 
 const HeaderCell = <K,>({
     colId,
-    headerName,
     headerClass,
     hidden,
     minWidth,
@@ -182,6 +196,7 @@ const HeaderCell = <K,>({
     sortable,
     onClick,
     onSortDetect,
+    ...props
 }: HeaderCellProps<K>) => {
     const sortingColId = sorting?.column.colId ?? undefined;
 
@@ -202,7 +217,8 @@ const HeaderCell = <K,>({
             className={clsx(styles.th, sortable !== false && styles.selectable, headerClass)}
         >
             <div className={styles.cell}>
-                <span>{headerName}</span>
+                {'headerName' in props ? props.headerName : props.headerComponent()}
+
                 {sorting !== null && sortingColId === colId && (
                     <div className={styles.icon}>
                         {sorting.type === 'desc' ? (
@@ -220,7 +236,44 @@ const HeaderCell = <K,>({
 const RowCell = <K,>({ column, row, rowIndex }: RowCellProps<K>) => {
     if (column.hidden) return null;
 
-    const value = column.valueGetter(row, rowIndex);
+    const getFormattedValue = () => {
+        const value = column.valueGetter(row, rowIndex);
+
+        try {
+            if ('valueFormatter' in column && typeof column?.valueFormatter === 'function') {
+                return column.valueFormatter?.({ row, value, rowIndex });
+            }
+
+            if ('valueType' in column && typeof column?.valueType === 'string') {
+                const valueAsNumber = Number(value);
+                const isNumber = !isNaN(valueAsNumber);
+
+                if (column.valueType === 'separate') {
+                    return isNumber ? sepNumbers(String(value)) : '−';
+                }
+
+                if (column.valueType === 'percent') {
+                    return isNumber ? `${toFixed(valueAsNumber)}%` : '−';
+                }
+
+                if (column.valueType === 'decimal') {
+                    return isNumber ? toFixed(Number(value), 4) : '−';
+                }
+
+                if (column.valueType === 'abbreviations') {
+                    return isNumber ? numFormatter(valueAsNumber) : '−';
+                }
+
+                if (column.valueType === 'date' || column.valueType === 'datetime' || column.valueType === 'time') {
+                    return typeof value !== 'boolean' ? dateFormatter(value, column.valueType) : '−';
+                }
+            }
+        } catch (e) {
+            //
+        }
+
+        return value;
+    };
 
     return (
         <td
@@ -231,7 +284,7 @@ const RowCell = <K,>({ column, row, rowIndex }: RowCellProps<K>) => {
                 typeof column.cellClass === 'function' ? column.cellClass(row) : column.cellClass,
             )}
         >
-            {typeof column?.valueFormatter === 'function' ? column.valueFormatter?.({ row, value, rowIndex }) : value}
+            {getFormattedValue()}
         </td>
     );
 };
