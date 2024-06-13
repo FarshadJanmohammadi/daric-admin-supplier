@@ -69,6 +69,10 @@
         "notApprove_select": "غیرمجاز"
     },
 
+    "no_data": {
+        "title": "اطلاعاتی برای نمایش وجود ندارد."
+    },
+
     "validation": {
         "this_field_is_required": "{{type}} را وارد کنید.",
         "length": "{{type}} را به درستی وارد نمایید."

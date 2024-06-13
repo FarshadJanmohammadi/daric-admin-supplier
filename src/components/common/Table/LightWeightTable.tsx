@@ -2,7 +2,10 @@ import { AngleDownSVG, AngleUpSVG } from '@/components/icons';
 import useTheme from '@/hooks/useTheme';
 import { dateFormatter, numFormatter, sepNumbers, toFixed } from '@/utils/helpers';
 import clsx from 'clsx';
+import _ from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
+import Loading from '../Loading';
+import NoData from '../NoData';
 import styles from './LightweightTable.module.scss';
 
 type TSorting<K> = null | { column: IColDef<K>; type: TSortingMethods };
@@ -58,6 +61,7 @@ interface LightweightTableProps<T extends unknown[], K> {
     reverseColors?: boolean;
     onRowClick?: (row: K, e: React.MouseEvent) => void;
     onHeaderClick?: (column: IColDef<K>, e: React.MouseEvent) => void;
+    loading?: boolean;
 }
 
 const LightweightTable = <T extends unknown[], K = ElementType<T>>({
@@ -69,6 +73,7 @@ const LightweightTable = <T extends unknown[], K = ElementType<T>>({
     headerHeight = 48,
     onRowClick,
     onHeaderClick,
+    loading = false,
 }: LightweightTableProps<T, K>) => {
     const [sorting, setSorting] = useState<TSorting<K>>(null);
 
@@ -164,20 +169,32 @@ const LightweightTable = <T extends unknown[], K = ElementType<T>>({
                 </thead>
 
                 <tbody className={styles.tbody}>
-                    {rowDataMapper.map((row, i) => (
-                        <tr
-                            style={{
-                                height: `${rowHeight}px`,
-                            }}
-                            onClick={(e) => onRowClick?.(row, e)}
-                            className={styles.tr}
-                            key={i}
-                        >
-                            {columnDefs.map((col) => (
-                                <RowCell key={col.colId} column={col} row={row} rowIndex={i} />
-                            ))}
-                        </tr>
-                    ))}
+                    {!loading ? (
+                        <>
+                            {_.isArray(rowDataMapper) && _.size(rowDataMapper) !== 0 ? (
+                                <>
+                                    {rowDataMapper.map((row, i) => (
+                                        <tr
+                                            style={{
+                                                height: `${rowHeight}px`,
+                                            }}
+                                            onClick={(e) => onRowClick?.(row, e)}
+                                            className={styles.tr}
+                                            key={i}
+                                        >
+                                            {columnDefs.map((col) => (
+                                                <RowCell key={col.colId} column={col} row={row} rowIndex={i} />
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </>
+                            ) : (
+                                <NoData />
+                            )}
+                        </>
+                    ) : (
+                        <Loading />
+                    )}
                 </tbody>
             </table>
         </div>

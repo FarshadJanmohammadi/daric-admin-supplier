@@ -12,7 +12,7 @@ export const useSuppliersReportsQuery = createQuery<
         console.log(queryKey, 'queryKey');
         const status = queryKey[1];
         try {
-            const response = await axios.post<ISuppliersReports[]>(
+            const response = await axios.post<ServerResponse<ISuppliersReports[]>>(
                 apiRoutes.supplier.getAll,
                 {
                     status,
@@ -23,9 +23,9 @@ export const useSuppliersReportsQuery = createQuery<
             );
             const data = response.data;
 
-            // if (response.status !== 200 || !data.isSuccess) throw new Error(data.validationErrors?.[0].errors[0] ?? '');
+            if (response.status !== 200 || !data.isSuccess) throw new Error(data.validationErrors?.[0].errors[0] ?? '');
 
-            return data;
+            return data.data;
         } catch (e) {
             return null;
         }

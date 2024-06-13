@@ -134,7 +134,7 @@ const OTP = () => {
                                 i18nKey={'otp_page.send_otp'}
                                 values={{
                                     mobileNumber: '+989122485266',
-                                    length: 6,
+                                    length: 4,
                                 }}
                                 components={{
                                     span: <span dir='ltr' className='font-bold' />,

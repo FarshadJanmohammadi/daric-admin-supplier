@@ -67,7 +67,12 @@ const Form = ({
                         errors.supplierName && 'error',
                     )}
                 >
-                    <input className='w-full p-12' {...register('supplierName')} placeholder='نام تامین کنندگان' />
+                    <input
+                        className='w-full p-12'
+                        {...register('supplierName')}
+                        placeholder='نام تامین کنندگان'
+                        autoComplete='off'
+                    />
 
                     {watch('supplierName') && (
                         <button
@@ -107,7 +112,12 @@ const Form = ({
                             errors.nationalCode && 'error',
                         )}
                     >
-                        <input className='w-full p-12' {...register('nationalCode')} placeholder='کدملی' />
+                        <input
+                            className='w-full p-12'
+                            {...register('nationalCode')}
+                            placeholder='کدملی'
+                            autoComplete='off'
+                        />
                         {watch('nationalCode') && (
                             <button
                                 className={clsx('transition-colors', {
@@ -144,7 +154,12 @@ const Form = ({
                             errors.mobileNumber && 'error',
                         )}
                     >
-                        <input className='w-full p-12' {...register('mobileNumber')} placeholder='شماره همراه' />
+                        <input
+                            className='w-full p-12'
+                            {...register('mobileNumber')}
+                            placeholder='شماره همراه'
+                            autoComplete='off'
+                        />
                         {watch('mobileNumber') && (
                             <button
                                 className={clsx('transition-colors', {
@@ -183,7 +198,12 @@ const Form = ({
                             errors.guarantee && 'error',
                         )}
                     >
-                        <input className='w-full p-12' {...register('guarantee')} placeholder='سقف مجاز' />
+                        <input
+                            className='w-full p-12'
+                            {...register('guarantee')}
+                            placeholder='سقف مجاز'
+                            autoComplete='off'
+                        />
 
                         {watch('guarantee') && (
                             <button
@@ -221,7 +241,12 @@ const Form = ({
                             errors.cardNumber && 'error',
                         )}
                     >
-                        <input className='w-full p-12' {...register('cardNumber')} placeholder='شماره ثبت' />
+                        <input
+                            className='w-full p-12'
+                            {...register('cardNumber')}
+                            placeholder='شماره ثبت'
+                            autoComplete='off'
+                        />
 
                         {watch('cardNumber') && (
                             <button

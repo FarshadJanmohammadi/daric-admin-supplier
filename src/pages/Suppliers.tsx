@@ -45,7 +45,7 @@ const Suppliers = () => {
 
     const [isActiveSuppliers] = useState<boolean | null>(null);
 
-    const { data: suppliersReportsData } = useSuppliersReportsQuery({
+    const { data: suppliersReportsData, isFetching: suppliersReportsIsFetching } = useSuppliersReportsQuery({
         queryKey: ['suppliersReportsQuery', isActiveSuppliers],
     });
 
@@ -223,10 +223,12 @@ const Suppliers = () => {
                 className='bg-brand-200/20 dark:bg-dark-brand-200/20'
             />
 
-            <div>
-                <div className=' flex-1 rounded-sm p-8'>
-                    <LightweightTable rowData={suppliersReportsData || []} columnDefs={columnDefs} />
-                </div>
+            <div className=' flex-1 rounded-sm p-8'>
+                <LightweightTable
+                    rowData={suppliersReportsData || []}
+                    columnDefs={columnDefs}
+                    loading={suppliersReportsIsFetching}
+                />
             </div>
         </div>
     );
