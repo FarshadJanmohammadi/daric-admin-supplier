@@ -18,6 +18,11 @@ const routes = {
     auth: {
         login: createRoute('DASHBOARD_API', 'Login'),
     },
+
+    marketLive: {
+        getAll: 'https://apie.daric.gold/api/HedgeAlert/GetUnreadAlerts',
+        pairList: 'https://apie.daric.gold/api/Dashboard/PairList',
+    },
 };
 
 export default routes;

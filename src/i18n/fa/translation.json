@@ -80,5 +80,13 @@
 
     "alerts": {
         "exit_account_sorry": "از حساب کاربری خود خارج شدید."
+    },
+
+    "market_live_page": {
+        "id_column": "ردیف",
+        "date_column": "تاریخ",
+        "time_column": "زمان",
+        "price_column": "قیمت",
+        "amount_column": "حجم"
     }
 }

@@ -10,3 +10,13 @@ declare interface ServerResponse<T = unknown> {
     }> | null;
     errorCode: 0;
 }
+
+declare interface PaginationResponse<T = unknown> {
+    data: T[];
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    pageIndex: number;
+    pageSize: number;
+    totalPages: number;
+    totalRecord: number;
+}

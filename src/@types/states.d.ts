@@ -17,3 +17,10 @@ declare namespace SuppliersManage {
         cardNumber: string;
     }
 }
+
+declare namespace MarketLive {
+    export interface IPageSetting {
+        pageNumber: number;
+        pageSize: number;
+    }
+}

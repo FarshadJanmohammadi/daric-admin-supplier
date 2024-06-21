@@ -1,0 +1,70 @@
+.root {
+--text-color: theme("colors.text.200");
+--text-color-active: theme("colors.text.100");
+--border-color: theme("colors.icons.100");
+--border-color-active: theme("colors.info.100");
+--bg-color: theme("colors.info.100");
+
+&:dark {
+--text-color: theme("colors.dark.text.200");
+--text-color-active: theme("colors.dark.text.100");
+--border-color: theme("colors.dark.icons.100");
+--border-color-active: theme("colors.dark.info.100");
+--bg-color: theme("colors.info.100")
+
+
+}
+
+	display: block;
+	position: relative;
+}
+
+.label {
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 0.8rem;
+}
+
+.text {
+	color: var(--text-color);
+	font-size: 13px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+
+	&.active {
+		color: var(--text-color-active);
+	}
+}
+
+.radiobox {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	cursor: pointer;
+	width: 1.6rem;
+	height: 1.6rem;
+	border: 1px solid var(--border-color);
+	border-radius: 50%;
+	background-color: transparent;
+	padding: 3px;
+
+	&.checked {
+		border: 1px solid var(--border-color-active);
+		position: relative;
+
+		&::after {
+			content: "";
+			top: 50%;
+			left: 50%;
+			position: absolute;
+			border-radius: 50%;
+			width: 100%;
+			height: 100%;
+			border: 4px solid var(--bg-color);
+			transform: translate(-50%, -50%);
+		}
+	}
+}

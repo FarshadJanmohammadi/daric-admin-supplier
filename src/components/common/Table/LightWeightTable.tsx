@@ -1,11 +1,8 @@
 import { AngleDownSVG, AngleUpSVG } from '@/components/icons';
-import useTheme from '@/hooks/useTheme';
+import { useTheme } from '@/hooks';
 import { dateFormatter, numFormatter, sepNumbers, toFixed } from '@/utils/helpers';
 import clsx from 'clsx';
-import _ from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
-import Loading from '../Loading';
-import NoData from '../NoData';
 import styles from './LightweightTable.module.scss';
 
 type TSorting<K> = null | { column: IColDef<K>; type: TSortingMethods };
@@ -54,6 +51,8 @@ interface RowCellProps<K> {
 
 interface LightweightTableProps<T extends unknown[], K> {
     rowData: T;
+    headerClass?: string;
+    cellClass?: string;
     className?: ClassesValue;
     columnDefs: Array<IColDef<K>>;
     rowHeight?: number;
@@ -61,19 +60,19 @@ interface LightweightTableProps<T extends unknown[], K> {
     reverseColors?: boolean;
     onRowClick?: (row: K, e: React.MouseEvent) => void;
     onHeaderClick?: (column: IColDef<K>, e: React.MouseEvent) => void;
-    loading?: boolean;
 }
 
 const LightweightTable = <T extends unknown[], K = ElementType<T>>({
     columnDefs,
     rowData,
     className,
-    reverseColors,
+    reverseColors = true,
+    headerClass,
+    cellClass,
     rowHeight = 48,
     headerHeight = 48,
     onRowClick,
     onHeaderClick,
-    loading = false,
 }: LightweightTableProps<T, K>) => {
     const [sorting, setSorting] = useState<TSorting<K>>(null);
 
@@ -145,21 +144,15 @@ const LightweightTable = <T extends unknown[], K = ElementType<T>>({
     }, [rowData, sorting]);
 
     return (
-        <div className={clsx(styles.wrapper)}>
-            <table
-                className={clsx(
-                    styles.table,
-                    theme === 'dark' && styles.dark,
-                    reverseColors && styles.reverseColors,
-                    className,
-                )}
-            >
+        <div className={clsx(styles.wrapper, theme === 'dark' && styles.dark)}>
+            <table className={clsx(styles.table, className)}>
                 <thead className={styles.thead}>
                     <tr style={{ height: `${headerHeight}px` }} className={styles.tr}>
                         {columnDefs.map((col) => (
                             <HeaderCell
                                 key={col.colId}
                                 {...col}
+                                headerClass={clsx(headerClass, col.headerClass)}
                                 sorting={sorting}
                                 onSortDetect={(sortType) => onSortDetect(sortType, col)}
                                 onClick={(e) => onClickHeaderCell(col, e)}
@@ -169,32 +162,28 @@ const LightweightTable = <T extends unknown[], K = ElementType<T>>({
                 </thead>
 
                 <tbody className={styles.tbody}>
-                    {!loading ? (
-                        <>
-                            {_.isArray(rowDataMapper) && _.size(rowDataMapper) !== 0 ? (
-                                <>
-                                    {rowDataMapper.map((row, i) => (
-                                        <tr
-                                            style={{
-                                                height: `${rowHeight}px`,
-                                            }}
-                                            onClick={(e) => onRowClick?.(row, e)}
-                                            className={styles.tr}
-                                            key={i}
-                                        >
-                                            {columnDefs.map((col) => (
-                                                <RowCell key={col.colId} column={col} row={row} rowIndex={i} />
-                                            ))}
-                                        </tr>
-                                    ))}
-                                </>
-                            ) : (
-                                <NoData />
-                            )}
-                        </>
-                    ) : (
-                        <Loading />
-                    )}
+                    {rowDataMapper.map((row, i) => (
+                        <tr
+                            style={{
+                                height: `${rowHeight}px`,
+                            }}
+                            onClick={(e) => onRowClick?.(row, e)}
+                            className={clsx(styles.tr, !reverseColors && styles.reverseColors)}
+                            key={i}
+                        >
+                            {columnDefs.map((col) => (
+                                <RowCell
+                                    key={col.colId}
+                                    row={row}
+                                    rowIndex={i}
+                                    column={{
+                                        ...col,
+                                        cellClass: clsx(col.cellClass, cellClass),
+                                    }}
+                                />
+                            ))}
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>

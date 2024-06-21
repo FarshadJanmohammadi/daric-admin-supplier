@@ -67,7 +67,7 @@ const Header = () => {
                     </PopoverTrigger>
                     <PopoverContent
                         style={{ minWidth: '20rem' }}
-                        className='mt-16 flex flex-col gap-32 rounded-md border border-brand-100/40 bg-background-200 p-16 shadow-md dark:border-dark-brand-100/20 dark:bg-dark-background-200'
+                        className='z-50 mt-16 flex flex-col gap-32 rounded-md border border-brand-100/40 bg-background-200 p-16 shadow-md dark:border-dark-brand-100/20 dark:bg-dark-background-200'
                     >
                         <PopoverHeading className='flex flex-col gap-8 border-b border-b-brand-100/40  py-8 text-base text-text-100 dark:border-b-dark-brand-100/20 dark:text-dark-text-100'>
                             <span className='text-text-100 dark:text-dark-text-100'>محمدحسین رضایی (کاربر عادی)</span>
@@ -104,7 +104,7 @@ const Header = () => {
                         </PopoverTrigger>
                         <PopoverContent
                             style={{ minWidth: '20rem' }}
-                            className='mt-16 flex flex-col gap-32 rounded-md border border-brand-100/40 bg-background-200 p-16 shadow-md dark:border-dark-brand-100/20 dark:bg-dark-background-200'
+                            className='z-50 mt-16 flex flex-col gap-32 rounded-md border border-brand-100/40 bg-background-200 p-16 shadow-md dark:border-dark-brand-100/20 dark:bg-dark-background-200'
                         >
                             <PopoverHeading className='flex items-center justify-center gap-8 text-base font-bold text-text-100 dark:text-dark-text-100'>
                                 <PalletColorSVG className='text-icons-100 dark:text-dark-icons-100' />
@@ -160,7 +160,7 @@ const Header = () => {
                         </PopoverTrigger>
                         <PopoverContent
                             style={{ minWidth: '20rem' }}
-                            className='mt-16 flex flex-col gap-32 rounded-md border border-brand-100/40 bg-background-200 p-16 shadow-md dark:border-dark-brand-100/20 dark:bg-dark-background-200'
+                            className='z-50 mt-16 flex flex-col gap-32 rounded-md border border-brand-100/40 bg-background-200 p-16 shadow-md dark:border-dark-brand-100/20 dark:bg-dark-background-200'
                         >
                             <PopoverHeading className='text-base font-bold text-text-100 dark:text-dark-text-100'>
                                 پیام‌ها

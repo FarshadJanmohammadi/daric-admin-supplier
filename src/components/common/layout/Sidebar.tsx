@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from '../Button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeading, DialogTrigger } from '../Dialog';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip';
 
 const MenuItems = () => {
     const { t } = useTranslation();
@@ -71,17 +72,31 @@ const MenuItems = () => {
             {ITEMS.map(({ id, icon, path }) => (
                 <li
                     className={clsx(
-                        ' flex h-48 w-full cursor-pointer items-center gap-8 p-8 px-16 text-lg transition-colors',
+                        ' flex h-48 w-full cursor-pointer items-center gap-8 p-8 px-16 text-lg transition-all',
                         {
                             'rounded-md bg-brand-200/20 font-medium text-brand-100 dark:bg-dark-brand-200/20 dark:text-dark-brand-100':
                                 location.pathname === path,
                             '    font-normal text-text-100 dark:text-dark-text-100': location.pathname !== path,
                         },
+                        {
+                            'justify-center': !sidebarToggle,
+                            'justify-start': sidebarToggle,
+                        },
                     )}
                     key={id}
                     onClick={() => navigate(path)}
                 >
-                    <div>{icon}</div>
+                    <Tooltip placement='left'>
+                        <TooltipTrigger>
+                            <div>{icon}</div>
+                        </TooltipTrigger>
+                        <TooltipContent
+                            style={{ zIndex: 9999, display: sidebarToggle ? 'none' : 'block' }}
+                            className='   rounded-md bg-background-input px-16 py-8 text-base font-bold text-text-100 dark:bg-dark-background-input dark:text-dark-text-100'
+                        >
+                            {t(`sidebar.${id}`)}
+                        </TooltipContent>
+                    </Tooltip>
                     <AnimatePresence>
                         {sidebarToggle && (
                             <motion.span
@@ -157,7 +172,17 @@ const Sidebar = () => {
                     })}
                 >
                     <Link className='flex items-center gap-8' to='/sessions'>
-                        <RemainClockSVG width='2.6rem' height='2.6rem' />
+                        <Tooltip placement='left'>
+                            <TooltipTrigger disabled>
+                                <RemainClockSVG width='2.6rem' height='2.6rem' />
+                            </TooltipTrigger>
+                            <TooltipContent
+                                style={{ zIndex: 9999, display: sidebarToggle ? 'none' : 'block' }}
+                                className='   rounded-md bg-background-input px-16 py-8 text-base font-bold text-text-100 dark:bg-dark-background-input dark:text-dark-text-100'
+                            >
+                                {t('sidebar.sessions')}
+                            </TooltipContent>
+                        </Tooltip>
                         <AnimatePresence>
                             {sidebarToggle && (
                                 <motion.span

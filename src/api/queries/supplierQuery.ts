@@ -9,7 +9,6 @@ export const useSuppliersReportsQuery = createQuery<
     staleTime: 0,
     queryKey: ['suppliersReportsQuery', null],
     queryFn: async ({ signal, queryKey }) => {
-        console.log(queryKey, 'queryKey');
         const status = queryKey[1];
         try {
             const response = await axios.post<ServerResponse<ISuppliersReports[]>>(

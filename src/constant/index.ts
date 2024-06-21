@@ -13,3 +13,8 @@ export const initialSupplierFilters = {
     nationalCode: '',
     mobileNumber: '',
 };
+
+export const initialMarketLivePageSetting = {
+    pageNumber: 1,
+    pageSize: 25,
+};

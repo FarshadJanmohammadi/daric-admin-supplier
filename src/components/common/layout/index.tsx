@@ -14,7 +14,7 @@ const Layout = () => {
                     <Sidebar />
                     <div className='flex min-h-full flex-1 flex-col'>
                         <Header />
-                        <div className='flex flex-1 bg-background-100 p-16 dark:bg-dark-background-100'>
+                        <div className='flex flex-1 overflow-hidden bg-background-100 p-16 dark:bg-dark-background-100'>
                             <Outlet />
                         </div>
                         <Footer />
