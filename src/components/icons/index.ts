@@ -26,6 +26,7 @@ import PalletColorSVG from './pallet-color.svg?react';
 import PhoneSVG from './phone.svg?react';
 import PlusSVG from './plus.svg?react';
 import PointVerticalSVG from './point-vertical.svg?react';
+import PowerSVG from './power.svg?react';
 import ProfileSVG from './profile.svg?react';
 import RefreshSVG from './refresh.svg?react';
 import RemainClockSVG from './remain-clock.svg?react';
@@ -65,6 +66,7 @@ export {
     PhoneSVG,
     PlusSVG,
     PointVerticalSVG,
+    PowerSVG,
     ProfileSVG,
     RefreshSVG,
     RemainClockSVG,

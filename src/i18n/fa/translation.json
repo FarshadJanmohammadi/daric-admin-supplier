@@ -66,7 +66,14 @@
         "active_select": "فعال",
         "notActive_select": "غیرفعال",
         "approve_select": "مجاز",
-        "notApprove_select": "غیرمجاز"
+        "notApprove_select": "غیرمجاز",
+        "buy_price": "قیمت خرید",
+        "sell_price": "قیمت فروش",
+        "buy_volume": "حجم خرید",
+        "sell_volume": "حجم فروش",
+        "amount_alert": "مقدار هشدار",
+        "buy_spread": "اسپرد خرید",
+        "sell_spread": "اسپرد فروش"
     },
 
     "no_data": {
@@ -88,5 +95,26 @@
         "time_column": "زمان",
         "price_column": "قیمت",
         "amount_column": "حجم"
+    },
+
+    "select_strategy_modal": {
+        "title": "انتخاب استراتژی قیمت گذاری"
+    },
+
+    "manual_strategy_modal": {
+        "title": "استراتژی قیمت گذاری دستی"
+    },
+
+    "auto_strategy_modal": {
+        "title": "استراتژی قیمت گذاری خودکار"
+    },
+
+    "confirm_active_panel_modal": {
+        "title": "{{type}} پنل",
+        "confirm": "آیا از {{type}} پنل خود اطمینان دارید؟"
+    },
+
+    "OTP_active_panel_modal": {
+        "title": "تایید پیامکی"
     }
 }

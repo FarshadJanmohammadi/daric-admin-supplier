@@ -10,11 +10,14 @@ import {
     RemainClockSVG,
     SunSVG,
 } from '@/components/icons';
+import useModalStore from '@/features/useModalStore';
 import useUiStore from '@/features/useUiStore';
 import clsx from 'clsx';
 import { useState } from 'react';
 import Clock from '../Clock';
+import PowerToggle from '../Inputs/PowerToggle';
 import { Popover, PopoverContent, PopoverDescription, PopoverHeading, PopoverTrigger } from '../Popover';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip';
 
 const Header = () => {
     const { theme, setTheme } = useTheme();
@@ -25,7 +28,9 @@ const Header = () => {
 
     const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
-    const { sidebarToggle, setSidebarToggle } = useUiStore((state) => state);
+    const { sidebarToggle, setSidebarToggle, activePanel } = useUiStore((state) => state);
+
+    const { toggleConfirmActivePanelModal } = useModalStore((store) => store);
 
     const onWindowMatch = () => {
         //
@@ -38,52 +43,55 @@ const Header = () => {
         }
     };
 
+    const onClickPowerToggle = () => {
+        toggleConfirmActivePanelModal({});
+    };
+
     return (
         <header
             style={{ minHeight: '8rem', maxHeight: '8rem' }}
             className=' flex items-center justify-center bg-background-200 p-16 pr-0 dark:bg-dark-background-200 '
         >
             <div className='relative flex flex-1 items-center justify-between'>
-                <button
-                    className={clsx(
-                        'absolute -right-28 top-1/2 translate-y-1/2 rounded-circle bg-background-100 p-8 dark:bg-dark-background-100',
-                    )}
-                    onClick={() => setSidebarToggle()}
-                    style={{ zIndex: 9999 }}
-                >
-                    <div
-                        style={{
-                            maxWidth: '3.4rem',
-                            maxHeight: '3.4rem',
-                        }}
-                        className=' flex items-center justify-center rounded-circle border border-brand-200/20 bg-brand-200/20 p-8 text-brand-100 dark:border-dark-brand-200/20 dark:bg-dark-brand-200/20 dark:text-dark-brand-100'
+                <div className='pr-48'>
+                    <button
+                        className={clsx(
+                            'absolute -right-28 top-1/2 translate-y-1/2 rounded-circle bg-background-100 p-8 dark:bg-dark-background-100',
+                        )}
+                        onClick={() => setSidebarToggle()}
+                        style={{ zIndex: 9999 }}
                     >
-                        <ArrowRightSVG className={clsx(sidebarToggle && 'rotate-180 transition-transform')} />
-                    </div>
-                </button>
-                <Popover placement='bottom-start'>
-                    <PopoverTrigger className='pr-16'>
-                        <AvatarSVG width='3.2rem' height='3.2rem' className='text-icons-100 dark:text-dark-icons-100' />
-                    </PopoverTrigger>
-                    <PopoverContent
-                        style={{ minWidth: '20rem' }}
-                        className='z-50 mt-16 flex flex-col gap-32 rounded-md border border-brand-100/40 bg-background-200 p-16 shadow-md dark:border-dark-brand-100/20 dark:bg-dark-background-200'
-                    >
-                        <PopoverHeading className='flex flex-col gap-8 border-b border-b-brand-100/40  py-8 text-base text-text-100 dark:border-b-dark-brand-100/20 dark:text-dark-text-100'>
-                            <span className='text-text-100 dark:text-dark-text-100'>محمدحسین رضایی (کاربر عادی)</span>
-                            <span className='text-text-200 dark:text-dark-text-200'>
-                                mohammadhosein.rezaee@gmail.com
-                            </span>
-                        </PopoverHeading>
-                        <PopoverDescription className='flex items-center justify-between text-center text-text-100 dark:text-dark-text-100'>
-                            <div className='flex items-center gap-4'>
-                                <RemainClockSVG className='text-icons-100 dark:text-dark-icons-100' />
-                                <span>آخرین ورود:</span>
-                            </div>
-                            <span>14:17 - 1403/03/03</span>
-                        </PopoverDescription>
-                    </PopoverContent>
-                </Popover>
+                        <div
+                            style={{
+                                maxWidth: '3.4rem',
+                                maxHeight: '3.4rem',
+                            }}
+                            className=' flex items-center justify-center rounded-circle border border-brand-200/20 bg-brand-200/20 p-8 text-brand-100 dark:border-dark-brand-200/20 dark:bg-dark-brand-200/20 dark:text-dark-brand-100'
+                        >
+                            <ArrowRightSVG className={clsx(sidebarToggle && 'rotate-180 transition-transform')} />
+                        </div>
+                    </button>
+
+                    <Tooltip placement='left'>
+                        <TooltipTrigger>
+                            <PowerToggle active={activePanel} setActive={onClickPowerToggle} />
+                        </TooltipTrigger>
+                        <TooltipContent
+                            style={{ zIndex: 9999, display: sidebarToggle ? 'none' : 'block' }}
+                            className='   rounded-md bg-background-input px-16 py-8 text-base font-bold text-text-100 dark:bg-dark-background-input dark:text-dark-text-100'
+                        >
+                            {activePanel ? (
+                                <span className='text-error-300 dark:text-dark-error-300'>
+                                    برای خاموش کردن پنل کلیک کنید
+                                </span>
+                            ) : (
+                                <span className='text-success-400 dark:text-dark-success-400'>
+                                    برای روشن کردن پنل کلیک کنید
+                                </span>
+                            )}
+                        </TooltipContent>
+                    </Tooltip>
+                </div>
 
                 <div className='flex items-center gap-32'>
                     <Popover placement='bottom'>
@@ -167,6 +175,36 @@ const Header = () => {
                             </PopoverHeading>
                             <PopoverDescription className='text-center text-text-200 dark:text-dark-text-200'>
                                 پیامی وجود ندارد.
+                            </PopoverDescription>
+                        </PopoverContent>
+                    </Popover>
+
+                    <Popover placement='bottom-start'>
+                        <PopoverTrigger className='pr-16'>
+                            <AvatarSVG
+                                width='3.2rem'
+                                height='3.2rem'
+                                className='text-icons-100 dark:text-dark-icons-100'
+                            />
+                        </PopoverTrigger>
+                        <PopoverContent
+                            style={{ minWidth: '20rem' }}
+                            className='z-50 mt-16 flex flex-col gap-32 rounded-md border border-brand-100/40 bg-background-200 p-16 shadow-md dark:border-dark-brand-100/20 dark:bg-dark-background-200'
+                        >
+                            <PopoverHeading className='flex flex-col gap-8 border-b border-b-brand-100/40  py-8 text-base text-text-100 dark:border-b-dark-brand-100/20 dark:text-dark-text-100'>
+                                <span className='text-text-100 dark:text-dark-text-100'>
+                                    محمدحسین رضایی (کاربر عادی)
+                                </span>
+                                <span className='text-text-200 dark:text-dark-text-200'>
+                                    mohammadhosein.rezaee@gmail.com
+                                </span>
+                            </PopoverHeading>
+                            <PopoverDescription className='flex items-center justify-between text-center text-text-100 dark:text-dark-text-100'>
+                                <div className='flex items-center gap-4'>
+                                    <RemainClockSVG className='text-icons-100 dark:text-dark-icons-100' />
+                                    <span>آخرین ورود:</span>
+                                </div>
+                                <span>14:17 - 1403/03/03</span>
                             </PopoverDescription>
                         </PopoverContent>
                     </Popover>

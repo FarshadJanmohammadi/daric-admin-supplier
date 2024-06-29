@@ -86,7 +86,7 @@ const AddEditSupplierModal = forwardRef<HTMLDivElement, AddEditSupplierModalProp
         nationalCode,
         cardNumber,
         active,
-        // guarantee,
+        guarantee,
         status,
     }) => {
         try {
@@ -97,7 +97,7 @@ const AddEditSupplierModal = forwardRef<HTMLDivElement, AddEditSupplierModalProp
                 mobileNumber: toEnglishNumber(mobileNumber),
                 activeInActiveKind: active.value === 'active' ? true : false,
                 status: status.value === 'approve' ? true : false,
-                guarantee: 0,
+                guarantee: Number(toEnglishNumber(guarantee)),
                 cardNumber: toEnglishNumber(cardNumber),
             });
             const data = response.data;
