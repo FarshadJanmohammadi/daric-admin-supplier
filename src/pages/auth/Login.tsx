@@ -38,7 +38,7 @@ const Login = () => {
             password: yup
                 .string()
                 .required(t('validation.this_field_is_required', { type: t('form.password') }))
-                .length(6, t('validation.length', { type: t('form.password') })),
+                .min(6, t('validation.length', { type: t('form.password') })),
         })
         .required();
 
