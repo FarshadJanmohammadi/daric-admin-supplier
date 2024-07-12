@@ -12,7 +12,7 @@ const NoData = () => {
             }}
         >
             <img width='120' height='120' alt='welcome' src='/assets/images/no-data.png' />
-            <span className='text-gray-900 text-base font-medium'>{t('no_data.title')}</span>
+            <span className='text-base font-medium text-text-100 dark:text-dark-text-100'>{t('no_data.title')}</span>
         </div>
     );
 };

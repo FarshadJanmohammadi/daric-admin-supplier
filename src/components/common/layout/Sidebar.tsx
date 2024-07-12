@@ -9,8 +9,8 @@ import {
     ProfileSVG,
     RemainClockSVG,
     ReportsSVG,
-    XFillSVG,
 } from '@/components/icons';
+import useModalStore from '@/features/useModalStore';
 import useUiStore from '@/features/useUiStore';
 import pagesRoutes from '@/routes';
 import clsx from 'clsx';
@@ -18,8 +18,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import Button from '../Button';
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeading, DialogTrigger } from '../Dialog';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip';
 
 const MenuItems = () => {
@@ -123,11 +121,7 @@ const Sidebar = () => {
 
     const location = useLocation();
 
-    const navigate = useNavigate();
-
-    const onExit = () => {
-        navigate(pagesRoutes.auth.logout);
-    };
+    const { toggleConfirmLogoutModal } = useModalStore((state) => state);
 
     return (
         <div
@@ -199,43 +193,44 @@ const Sidebar = () => {
                         </AnimatePresence>
                     </Link>
                 </li>
-                <li className='p-16 text-error-300 dark:text-dark-error-300'>
-                    <Dialog>
-                        <DialogTrigger className='flex items-center gap-8'>
-                            <OutBoxSVG width='2.4rem' height='2.4rem' />
-                            <AnimatePresence>
-                                {sidebarToggle && (
-                                    <motion.span
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        transition={{
-                                            duration: 0.5,
-                                        }}
-                                        className='text-lg font-medium '
-                                    >
-                                        {t('sidebar.logout')}
-                                    </motion.span>
-                                )}
-                            </AnimatePresence>
-                        </DialogTrigger>
-                        <DialogContent className='flex w-3/12 flex-col gap-16 rounded-md bg-background-200 p-16 dark:bg-dark-background-200'>
-                            <DialogHeading className='flex items-center justify-between border-b border-brand-100/40 pb-8 text-text-100 dark:border-brand-100/20 dark:text-dark-text-100'>
-                                <span className='text-base font-semibold'> خروج از حساب کاربری</span>
-                                <DialogClose className='text-icons-100 transition-colors hover:text-icons-100/80 dark:text-dark-icons-100 hover:dark:text-dark-icons-100/80'>
-                                    <XFillSVG width='2rem' height='2rem' />
-                                </DialogClose>
-                            </DialogHeading>
-                            <DialogDescription className='pb-16 pt-16  text-text-200 dark:text-dark-text-200'>
-                                آیا می‌خواهید از حساب کاربری خود خارج شوید؟
-                            </DialogDescription>
-                            <Button
-                                onClick={onExit}
-                                className='rounded-md bg-error-300 py-8 font-medium text-dark-text-100 transition-colors hover:bg-error-300/80 dark:bg-dark-error-300 hover:dark:bg-dark-error-300/80'
+                <li
+                    className={clsx('flex w-full items-center p-16 text-lg transition-colors', {
+                        'rounded-md bg-brand-100/20 font-medium text-brand-100 dark:bg-dark-brand-100/20 dark:text-dark-brand-100':
+                            location.pathname === '/sessions',
+                        '  font-normal text-text-100 dark:text-dark-text-100': location.pathname !== '/sessions',
+                    })}
+                >
+                    <button onClick={() => toggleConfirmLogoutModal({})} className='flex items-center gap-8'>
+                        <Tooltip placement='left'>
+                            <TooltipTrigger>
+                                <OutBoxSVG
+                                    className='text-error-300 dark:text-dark-error-300'
+                                    width='2.6rem'
+                                    height='2.6rem'
+                                />
+                            </TooltipTrigger>
+                            <TooltipContent
+                                style={{ zIndex: 9999, display: sidebarToggle ? 'none' : 'block' }}
+                                className='   rounded-md bg-background-input px-16 py-8 text-base font-bold text-error-300  dark:bg-dark-background-input dark:text-dark-error-300'
                             >
-                                خروج
-                            </Button>
-                        </DialogContent>
-                    </Dialog>
+                                {t('sidebar.logout')}
+                            </TooltipContent>
+                        </Tooltip>
+                        <AnimatePresence>
+                            {sidebarToggle && (
+                                <motion.span
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{
+                                        duration: 0.5,
+                                    }}
+                                    className='truncate text-nowrap text-error-300 dark:text-dark-error-300'
+                                >
+                                    {t('sidebar.logout')}
+                                </motion.span>
+                            )}
+                        </AnimatePresence>
+                    </button>
                 </li>
             </ul>
         </div>

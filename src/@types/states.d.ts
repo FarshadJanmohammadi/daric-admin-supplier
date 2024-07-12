@@ -16,6 +16,12 @@ declare namespace SuppliersManage {
         guarantee: string;
         cardNumber: string;
     }
+
+    export interface IFilterSupplierInputs {
+        name: string;
+        nationalCode: string;
+        mobileNumber: string;
+    }
 }
 
 declare namespace MarketLive {
@@ -27,18 +33,23 @@ declare namespace MarketLive {
 
 declare namespace Strategy {
     export interface IManualStrategyInputs {
-        buyPrice: string;
-        sellPrice: string;
-        buyVolume: string;
-        sellVolume: string;
+        price: string;
+        volume: string;
         amountAlert: string;
+        validity: number | string | Date;
     }
 
     export interface IAutoStrategyInputs {
-        buySpread: string;
-        sellSpread: string;
-        buyVolume: string;
-        sellVolume: string;
+        spread: string;
+        volume: string;
         amountAlert: string;
+        validity: number | string | Date;
     }
+}
+
+declare interface IOTPInputs {
+    input1: string;
+    input2: string;
+    input3: string;
+    input4: string;
 }

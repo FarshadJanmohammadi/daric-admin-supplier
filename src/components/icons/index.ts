@@ -6,6 +6,7 @@ import ArrowLeftSVG from './arrow-left.svg?react';
 import ArrowRightSVG from './arrow-right.svg?react';
 import ArrowUpSVG from './arrow-up.svg?react';
 import AvatarSVG from './avatar.svg?react';
+import CalenderSVG from './calender.svg?react';
 import DaricLogoText from './daric-logo-text.svg?react';
 import DaricLogo from './daric-logo.svg?react';
 import DevicesSVG from './devices.svg?react';
@@ -46,6 +47,7 @@ export {
     ArrowRightSVG,
     ArrowUpSVG,
     AvatarSVG,
+    CalenderSVG,
     DaricLogo,
     DaricLogoText,
     DevicesSVG,

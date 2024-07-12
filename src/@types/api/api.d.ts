@@ -9,6 +9,17 @@ declare interface ISuppliersReports {
     cardNumber: string;
 }
 
+declare interface ISupplierInformation {
+    id: number;
+    name: string;
+    nationalCode: string;
+    mobileNumber: string;
+    activeInActiveKind: boolean;
+    status: boolean;
+    guarantee: number;
+    cardNumber: string;
+}
+
 declare interface ILogin {
     token: string;
 }

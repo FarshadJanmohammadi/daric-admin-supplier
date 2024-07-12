@@ -2,14 +2,11 @@ import { axiosBase } from '@/api/axios';
 import apiRoutes from '@/api/routes';
 import { initialAddEditSupplierInputs } from '@/constant';
 import useModalStore from '@/features/useModalStore';
-import useUiStore from '@/features/useUiStore';
+import { useInputs } from '@/hooks';
 import { errorMessage, toEnglishNumber } from '@/utils/helpers';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { forwardRef, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { FormEvent, forwardRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import * as yup from 'yup';
 import Modal, { Header } from '../Modal';
 import Form from './Form';
 
@@ -22,83 +19,29 @@ const AddEditSupplierModal = forwardRef<HTMLDivElement, AddEditSupplierModalProp
 
     const { setAddSupplierModal, addSupplierModal } = useModalStore((state) => state);
 
-    const { minimizeTab, setMinimizeTab } = useUiStore((store) => store);
-
-    const schema = yup
-        .object({
-            supplierName: yup
-                .string()
-                .required(t('validation.this_field_is_required', { type: t('form.supplierName') })),
-            nationalCode: yup
-                .string()
-                .required(t('validation.this_field_is_required', { type: t('form.nationalCode') })),
-            mobileNumber: yup
-                .string()
-                .required(t('validation.this_field_is_required', { type: t('form.mobileNumber') })),
-            guarantee: yup.string().required(t('validation.this_field_is_required', { type: t('form.guarantee') })),
-            cardNumber: yup.string().required(t('validation.this_field_is_required', { type: t('form.cardNumber') })),
-            active: yup.object().shape({
-                value: yup.string().required(t('validation.this_field_is_required', { type: t('form.active') })),
-                label: yup.string().required(),
-            }),
-
-            status: yup.object().shape({
-                value: yup.string().required(t('validation.this_field_is_required', { type: t('form.status') })),
-                label: yup.string().required(),
-            }),
-        })
-        .required();
-
-    const {
-        register,
-        reset,
-        handleSubmit,
-        formState: { errors },
-        watch,
-        setValue,
-        trigger,
-        setFocus,
-        control,
-    } = useForm<SuppliersManage.IAddEditSupplierInputs>({
-        resolver: yupResolver(schema),
-        defaultValues: initialAddEditSupplierInputs,
-    });
-
-    console.log(watch(), 'watch');
+    const { inputs, setFieldValue, setFieldsValue } =
+        useInputs<SuppliersManage.IAddEditSupplierInputs>(initialAddEditSupplierInputs);
 
     const onCloseModal = () => {
         setAddSupplierModal(null);
-        setMinimizeTab(minimizeTab.filter((item) => item !== 'add_supplier_modal'));
     };
 
     const onClear = () => {
-        reset();
+        setFieldsValue(initialAddEditSupplierInputs);
     };
 
-    const onMinimize = () => {
-        setMinimizeTab(['add_supplier_modal']);
-        setAddSupplierModal({ minimize: true });
-    };
-
-    const onSubmit: SubmitHandler<SuppliersManage.IAddEditSupplierInputs> = async ({
-        supplierName,
-        mobileNumber,
-        nationalCode,
-        cardNumber,
-        active,
-        guarantee,
-        status,
-    }) => {
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         try {
             setLoading(true);
             const response = await axiosBase.post<ServerResponse<IAddSupplier>>(apiRoutes.supplier.add, {
-                name: supplierName,
-                nationalCode: toEnglishNumber(nationalCode),
-                mobileNumber: toEnglishNumber(mobileNumber),
-                activeInActiveKind: active.value === 'active' ? true : false,
-                status: status.value === 'approve' ? true : false,
-                guarantee: Number(toEnglishNumber(guarantee)),
-                cardNumber: toEnglishNumber(cardNumber),
+                name: inputs.supplierName,
+                nationalCode: toEnglishNumber(inputs.nationalCode),
+                mobileNumber: toEnglishNumber(inputs.mobileNumber),
+                activeInActiveKind: inputs.active.value === 'active' ? true : false,
+                status: inputs.status.value === 'approve' ? true : false,
+                guarantee: Number(toEnglishNumber(inputs.guarantee)),
+                cardNumber: toEnglishNumber(inputs.cardNumber),
             });
             const data = response.data;
 
@@ -119,34 +62,16 @@ const AddEditSupplierModal = forwardRef<HTMLDivElement, AddEditSupplierModalProp
     };
 
     return (
-        <Modal
-            minimize={addSupplierModal?.minimize}
-            moveable={addSupplierModal?.moveable}
-            onMinimize={onMinimize}
-            size='sm'
-            onClose={onCloseModal}
-            ref={ref}
-            {...props}
-        >
+        <Modal moveable={addSupplierModal?.moveable} size='sm' onClose={onCloseModal} ref={ref} {...props}>
             <div className='flex flex-col'>
-                <Header
-                    label={t('suppliers_manage_modal.title')}
-                    onClose={onCloseModal}
-                    onClear={onClear}
-                    onMinimize={onMinimize}
-                />
+                <Header label={t('suppliers_manage_modal.title')} onClose={onCloseModal} onClear={onClear} />
                 <Form
                     onSubmit={onSubmit}
-                    handleSubmit={handleSubmit}
-                    register={register}
-                    onCloseModal={onCloseModal}
-                    errors={errors}
-                    watch={watch}
-                    setValue={setValue}
-                    setFocus={setFocus}
-                    trigger={trigger}
-                    control={control}
+                    inputs={inputs}
+                    setFieldValue={setFieldValue}
+                    setFieldsValue={setFieldsValue}
                     loading={loading}
+                    onCloseModal={onCloseModal}
                 />
             </div>
         </Modal>

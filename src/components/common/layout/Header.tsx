@@ -81,13 +81,9 @@ const Header = () => {
                             className='   rounded-md bg-background-input px-16 py-8 text-base font-bold text-text-100 dark:bg-dark-background-input dark:text-dark-text-100'
                         >
                             {activePanel ? (
-                                <span className='text-error-300 dark:text-dark-error-300'>
-                                    برای خاموش کردن پنل کلیک کنید
-                                </span>
+                                <span>برای خاموش کردن پنل کلیک کنید</span>
                             ) : (
-                                <span className='text-success-400 dark:text-dark-success-400'>
-                                    برای روشن کردن پنل کلیک کنید
-                                </span>
+                                <span>برای روشن کردن پنل کلیک کنید</span>
                             )}
                         </TooltipContent>
                     </Tooltip>

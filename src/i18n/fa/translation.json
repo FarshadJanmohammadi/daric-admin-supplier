@@ -21,6 +21,12 @@
     },
     "pages": {
         "dashboard": "داشبورد",
+        "login": "ورود",
+        "market_live": "لایو بازار",
+        "suppliers": "کاربران",
+        "market_monitoring": "مانیتورینگ بازار",
+        "telephone_trades": "معاملات تلفنی",
+        "trades_histories": "تاریخچه معاملات",
         "suppliers_manage": "مدیریت تامین کنندگان"
     },
 
@@ -73,7 +79,8 @@
         "sell_volume": "حجم فروش",
         "amount_alert": "مقدار هشدار",
         "buy_spread": "اسپرد خرید",
-        "sell_spread": "اسپرد فروش"
+        "sell_spread": "اسپرد فروش",
+        "validity": "اعتبار"
     },
 
     "no_data": {

@@ -1,9 +1,9 @@
-export const initialAddEditSupplierInputs = {
+export const initialAddEditSupplierInputs: SuppliersManage.IAddEditSupplierInputs = {
     supplierName: '',
     nationalCode: '',
     mobileNumber: '',
-    active: {},
-    status: {},
+    active: { value: 'active', label: 'فعال' },
+    status: { value: 'approve', label: 'مجاز' },
     guarantee: '',
     cardNumber: '',
 };
@@ -20,17 +20,30 @@ export const initialMarketLivePageSetting = {
 };
 
 export const initialManualStrategyInputs: Strategy.IManualStrategyInputs = {
-    buyPrice: '',
-    sellPrice: '',
-    buyVolume: '',
-    sellVolume: '',
+    price: '',
+    volume: '',
     amountAlert: '',
+    validity: '',
 };
 
 export const initialAutoStrategyInputs: Strategy.IAutoStrategyInputs = {
-    buySpread: '',
-    sellSpread: '',
-    buyVolume: '',
-    sellVolume: '',
+    spread: '',
+    volume: '',
     amountAlert: '',
+    validity: new Date().getTime(),
+};
+
+export const weekDaysName = ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'];
+
+export const initialOTPInput: IOTPInputs = {
+    input1: '',
+    input2: '',
+    input3: '',
+    input4: '',
+};
+
+export const initialFilterSupplierInputs: SuppliersManage.IFilterSupplierInputs = {
+    mobileNumber: '',
+    name: '',
+    nationalCode: '',
 };

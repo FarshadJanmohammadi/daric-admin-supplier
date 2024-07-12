@@ -5,9 +5,9 @@ import NoData from '@/components/common/NoData';
 import Pagination from '@/components/common/Pagination';
 import LightweightTable, { IColDef } from '@/components/common/Table/LightWeightTable';
 import { initialMarketLivePageSetting } from '@/constant';
-import { dateFormatter, sepNumbers } from '@/utils/helpers';
+import { changePageTitle, dateFormatter, sepNumbers } from '@/utils/helpers';
 import _ from 'lodash';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const MarketLive = () => {
@@ -77,6 +77,11 @@ const MarketLive = () => {
         ],
         [],
     );
+
+    // Change Page Title
+    useEffect(() => {
+        changePageTitle(t('pages.market_live'));
+    }, []);
 
     return (
         <main className='h-full flex-1 overflow-hidden rounded bg-background-200 p-8 dark:bg-dark-background-200'>

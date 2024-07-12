@@ -1,0 +1,23 @@
+.custom-calendar.rmdp-wrapper,
+.rmdp-container .custom-calendar.ep-arrow::after {
+  @apply bg-background-200 dark:bg-dark-background-200 shadow-md;
+
+}
+
+.custom-calendar.rmdp-wrapper .rmdp-header-values {
+    @apply text-text-100 dark:text-dark-text-100 ;
+}
+
+.custom-calendar.rmdp-wrapper .rmdp-day-picker  {
+    @apply text-text-100 dark:text-dark-text-100 ;
+}
+
+
+
+.rmdp-container .custom-calendar.ep-arrow[direction="bottom"] {
+  border-top: 1px solid bisque;
+}
+
+.rmdp-container .custom-calendar.ep-arrow[direction="top"] {
+  border-bottom: 1px solid bisque;
+}

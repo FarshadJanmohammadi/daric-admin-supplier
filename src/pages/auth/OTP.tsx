@@ -1,21 +1,16 @@
 import Button from '@/components/common/Button';
 import { ArrowRightSVG, RefreshSVG, SupplierToDaricSVG } from '@/components/icons';
+import { initialOTPInput } from '@/constant';
 import pagesRoutes from '@/routes';
 import { toEnglishNumber } from '@/utils/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import * as yup from 'yup';
-
-interface IOTPInputs {
-    input1: string;
-    input2: string;
-    input3: string;
-    input4: string;
-}
 
 const OTP = () => {
     const { t } = useTranslation();
@@ -34,7 +29,8 @@ const OTP = () => {
         })
         .required();
 
-    const { register, handleSubmit, setFocus, watch } = useForm<IOTPInputs>({
+    const { register, handleSubmit, setFocus, watch, getValues } = useForm<IOTPInputs>({
+        defaultValues: initialOTPInput,
         resolver: yupResolver(schema),
     });
 
@@ -65,11 +61,9 @@ const OTP = () => {
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
-        console.log(event);
         if (event.code === 'Backspace') {
             if (!watch('input4')) {
                 setFocus('input3');
-                // trigger('input2', { shouldFocus: true });
             }
             if (!watch('input3')) {
                 setFocus('input2');
@@ -80,7 +74,6 @@ const OTP = () => {
         } else {
             if (watch('input1')) {
                 setFocus('input2');
-                // trigger('input2', { shouldFocus: true });
             }
             if (watch('input2')) {
                 setFocus('input3');
@@ -90,6 +83,18 @@ const OTP = () => {
             }
         }
     };
+
+    useEffect(() => {
+        if (watch('input1')) {
+            setFocus('input2');
+        }
+        if (watch('input2')) {
+            setFocus('input3');
+        }
+        if (watch('input3')) {
+            setFocus('input4');
+        }
+    }, [getValues()]);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -107,7 +112,7 @@ const OTP = () => {
             if (toEnglishNumber(Object.values(data).join('')) === '1234') {
                 toast.success('با موفقیت وارد  داشبورد شدید.');
 
-                navigate(pagesRoutes.dashboard);
+                navigate(pagesRoutes.suppliers);
             }
         } catch (error) {
             console.log(error);
@@ -133,7 +138,7 @@ const OTP = () => {
                             <Trans
                                 i18nKey={'otp_page.send_otp'}
                                 values={{
-                                    mobileNumber: '+989122485266',
+                                    mobileNumber: Cookies.get('mobile_number') ?? '-',
                                     length: 4,
                                 }}
                                 components={{
@@ -145,54 +150,49 @@ const OTP = () => {
 
                     <form method='get' onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-32'>
                         <div className='flex items-center justify-center gap-16' dir='ltr'>
-                            <div className='input-group'>
-                                <input
-                                    className=' h-48 w-48 !text-center text-3xl font-bold'
-                                    maxLength={1}
-                                    autoFocus
-                                    autoComplete='one-time-code'
-                                    type='tel'
-                                    inputMode='numeric'
-                                    tabIndex={1}
-                                    {...register('input1')}
-                                />
-                            </div>
-                            <div className='input-group flex items-center justify-center'>
-                                <input
-                                    className=' h-48 w-48  !text-center text-3xl font-bold'
-                                    dir='ltr'
-                                    maxLength={1}
-                                    autoComplete='off'
-                                    type='tel'
-                                    inputMode='numeric'
-                                    tabIndex={2}
-                                    {...register('input2')}
-                                />
-                            </div>
-                            <div className='input-group flex items-center justify-center'>
-                                <input
-                                    className=' h-48 w-48 !text-center text-3xl font-bold'
-                                    dir='ltr'
-                                    maxLength={1}
-                                    autoComplete='off'
-                                    type='tel'
-                                    inputMode='numeric'
-                                    tabIndex={3}
-                                    {...register('input3')}
-                                />
-                            </div>
-                            <div className='input-group flex items-center justify-center'>
-                                <input
-                                    className=' h-48 w-48 !text-center text-3xl font-bold'
-                                    dir='ltr'
-                                    maxLength={1}
-                                    autoComplete='off'
-                                    type='tel'
-                                    inputMode='numeric'
-                                    tabIndex={4}
-                                    {...register('input4')}
-                                />
-                            </div>
+                            <input
+                                className=' h-48 w-48 rounded-md border border-lines-200 bg-transparent !text-center text-3xl font-bold text-text-100 focus:border-brand-100 dark:border-dark-lines-200 dark:text-dark-text-100 dark:focus:border-dark-brand-100'
+                                maxLength={1}
+                                autoFocus
+                                autoComplete='one-time-code'
+                                type='tel'
+                                inputMode='numeric'
+                                tabIndex={1}
+                                {...register('input1')}
+                            />
+
+                            <input
+                                className=' h-48 w-48 rounded-md border border-lines-200 bg-transparent !text-center text-3xl font-bold text-text-100 focus:border-brand-100 dark:border-dark-lines-200 dark:text-dark-text-100 dark:focus:border-dark-brand-100'
+                                dir='ltr'
+                                maxLength={1}
+                                autoComplete='off'
+                                type='tel'
+                                inputMode='numeric'
+                                tabIndex={2}
+                                {...register('input2')}
+                            />
+
+                            <input
+                                className=' h-48 w-48 rounded-md border border-lines-200 bg-transparent !text-center text-3xl font-bold text-text-100 focus:border-brand-100 dark:border-dark-lines-200 dark:text-dark-text-100 dark:focus:border-dark-brand-100'
+                                dir='ltr'
+                                maxLength={1}
+                                autoComplete='off'
+                                type='tel'
+                                inputMode='numeric'
+                                tabIndex={3}
+                                {...register('input3')}
+                            />
+
+                            <input
+                                className=' h-48 w-48 rounded-md border border-lines-200 bg-transparent !text-center text-3xl font-bold text-text-100 focus:border-brand-100 dark:border-dark-lines-200 dark:text-dark-text-100 dark:focus:border-dark-brand-100'
+                                dir='ltr'
+                                maxLength={1}
+                                autoComplete='off'
+                                type='tel'
+                                inputMode='numeric'
+                                tabIndex={4}
+                                {...register('input4')}
+                            />
                         </div>
 
                         <div className=' text-center text-base font-medium text-text-200 dark:text-dark-text-200'>

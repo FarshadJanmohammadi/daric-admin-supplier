@@ -1,15 +1,14 @@
 import { axiosBase } from '@/api/axios';
 import apiRoutes from '@/api/routes';
 import Button from '@/components/common/Button';
-import { EyeShieldSVG, EyeSVG, SupplierToDaricSVG, XFillSVG, XSVG } from '@/components/icons';
+import Input from '@/components/common/Inputs/Input';
+import { SupplierToDaricSVG } from '@/components/icons';
 import pagesRoutes from '@/routes';
-import { errorMessage } from '@/utils/helpers';
+import { changePageTitle, errorMessage } from '@/utils/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
-import clsx from 'clsx';
-import { AnimatePresence, motion } from 'framer-motion';
 import Cookies from 'js-cookie';
-import { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -25,8 +24,6 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-    const [isShowPassword, setShowPassword] = useState(false);
-
     const [isLoading, setLoading] = useState(false);
 
     const schema = yup
@@ -34,7 +31,7 @@ const Login = () => {
             userName: yup
                 .string()
                 .required(t('validation.this_field_is_required', { type: t('form.user_name') }))
-                .length(11, t('validation.length', { type: t('form.user_name') })),
+                .length(11, t('validation.length', { type: t('form.mobileNumber') })),
             password: yup
                 .string()
                 .required(t('validation.this_field_is_required', { type: t('form.password') }))
@@ -43,11 +40,8 @@ const Login = () => {
         .required();
 
     const {
-        register,
         handleSubmit,
-        setFocus,
-        setValue,
-        trigger,
+        control,
         formState: { errors },
     } = useForm<Inputs>({
         resolver: yupResolver(schema),
@@ -72,6 +66,8 @@ const Login = () => {
 
             Cookies.set('client_id', data.data.token);
 
+            Cookies.set('mobile_number', userName);
+
             navigate(pagesRoutes.auth.OTP);
         } catch (e) {
             setLoading(false);
@@ -80,11 +76,10 @@ const Login = () => {
         }
     };
 
-    const onResetField = (input: 'userName' | 'password') => {
-        setValue(input, '');
-        trigger(input);
-        setFocus(input);
-    };
+    // Change Page Title
+    useEffect(() => {
+        changePageTitle(t('pages.login'));
+    }, []);
 
     return (
         <div className='min-w-screen flex min-h-screen bg-background-100 dark:bg-dark-background-100'>
@@ -101,85 +96,37 @@ const Login = () => {
                     </span>
 
                     <div className='flex flex-col gap-32 '>
-                        <div className='flex flex-col gap-8'>
-                            <div
-                                className={clsx(
-                                    'input-group z-20 flex items-center justify-between px-8',
-                                    errors.userName && 'error',
-                                )}
-                            >
-                                <input
-                                    placeholder={t('login_page.user_name_placeholder')}
-                                    {...register('userName')}
-                                    className='w-full px-8 py-16'
+                        <Controller
+                            name='userName'
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    classes={{
+                                        container: 'bg-background-300 dark:bg-dark-background-300',
+                                    }}
+                                    placeholder='شماره همراه را واد کنید'
+                                    error={errors.userName}
+                                    type='number'
+                                    {...field}
                                 />
+                            )}
+                        />
 
-                                <button
-                                    className={clsx('transition-colors', {
-                                        'text-icons-200 dark:text-dark-icons-200': !errors.userName,
-                                        'text-error-300 dark:text-dark-error-300': errors.userName,
-                                    })}
-                                    type='button'
-                                    onClick={() => onResetField('userName')}
-                                >
-                                    <XSVG width='1.8rem' height='1.8rem' />
-                                </button>
-                            </div>
-                            <AnimatePresence mode='popLayout'>
-                                {errors.userName && (
-                                    <motion.div
-                                        initial={{ y: -30 }}
-                                        animate={{ y: 0 }}
-                                        exit={{ y: -30 }}
-                                        className=' z-10 flex items-center gap-8 px-8 text-error-300 dark:text-dark-error-300'
-                                    >
-                                        <XFillSVG width='1.6rem' height='1.6rem' />
-                                        <span>{errors.userName?.message}</span>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                        <div className='flex flex-col gap-8'>
-                            <div
-                                className={clsx(
-                                    'input-group z-20 flex items-center justify-between  px-8',
-                                    errors.password && 'error',
-                                )}
-                            >
-                                <input
-                                    placeholder={t('login_page.password_placeholder')}
-                                    {...register('password')}
-                                    type={isShowPassword ? 'text' : 'password'}
-                                    className='w-full px-8 py-16'
+                        <Controller
+                            name='password'
+                            control={control}
+                            render={({ field }) => (
+                                <Input
+                                    classes={{
+                                        container: 'bg-background-300 dark:bg-dark-background-300',
+                                    }}
+                                    placeholder='رمز عبور را وارد کنید'
+                                    error={errors.password}
+                                    type='password'
+                                    {...field}
                                 />
-                                <div
-                                    className={clsx('flex items-center gap-8 transition-colors', {
-                                        'text-icons-200 dark:text-dark-icons-200': !errors.password,
-                                        'text-error-300 dark:text-dark-error-300': errors.password,
-                                    })}
-                                >
-                                    <button type='button' onClick={() => setShowPassword((prev) => !prev)}>
-                                        {isShowPassword ? <EyeSVG width='2.2rem' height='2.2rem' /> : <EyeShieldSVG />}
-                                    </button>
-                                    <button type='button' onClick={() => onResetField('password')}>
-                                        <XSVG width='1.8rem' height='1.8rem' />
-                                    </button>
-                                </div>
-                            </div>
-                            <AnimatePresence mode='popLayout'>
-                                {errors.password && (
-                                    <motion.div
-                                        initial={{ y: -30 }}
-                                        animate={{ y: 0 }}
-                                        exit={{ y: -30 }}
-                                        className=' z-10 flex items-center gap-8 px-8 text-error-300 dark:text-dark-error-300'
-                                    >
-                                        <XFillSVG width='1.6rem' height='1.6rem' />
-                                        <span>{errors.password?.message}</span>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
+                            )}
+                        />
                         <div className='pt-16'>
                             <Button
                                 loading={isLoading}

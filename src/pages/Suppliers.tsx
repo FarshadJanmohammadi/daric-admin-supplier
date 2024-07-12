@@ -1,47 +1,28 @@
 import { useSuppliersReportsQuery } from '@/api/queries/supplierQuery';
+import Input from '@/components/common/Inputs/Input';
+import NoData from '@/components/common/NoData';
 import LightweightTable, { IColDef } from '@/components/common/Table/LightWeightTable';
-import { EditSVG, EraserSVG, PlusSVG, TrashSVG, XFillSVG } from '@/components/icons';
+import { EditSVG, EraserSVG, PlusSVG, TrashSVG } from '@/components/icons';
+import { initialFilterSupplierInputs } from '@/constant';
 import useModalStore from '@/features/useModalStore';
+import { useInputs } from '@/hooks';
 import { ISuppliersMock } from '@/mock';
 import { changePageTitle } from '@/utils/helpers';
-import { yupResolver } from '@hookform/resolvers/yup';
-import clsx from 'clsx';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
-
-interface IInputFilter {
-    name: string;
-    nationalCode: string;
-    mobileNumber: string;
-}
 
 const Suppliers = () => {
     const { t } = useTranslation();
 
     const { setAddSupplierModal, addSupplierModal } = useModalStore((store) => store);
 
-    const schema = yup.object({
-        name: yup.string().required(t('validation.this_field_is_required', { type: t('form.supplierName') })),
-        nationalCode: yup.string().required(t('validation.this_field_is_required', { type: t('form.nationalCode') })),
-        mobileNumber: yup.string().required(t('validation.this_field_is_required', { type: t('form.mobileNumber') })),
-    });
+    const { inputs, setFieldValue, setFieldsValue } =
+        useInputs<SuppliersManage.IFilterSupplierInputs>(initialFilterSupplierInputs);
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        formState: { errors },
-    } = useForm<IInputFilter>({
-        defaultValues: {
-            name: '',
-            nationalCode: '',
-            mobileNumber: '',
-        },
-        resolver: yupResolver(schema),
-    });
+    const [inputsAfterSubmit, setInputAfterSubmit] =
+        useState<SuppliersManage.IFilterSupplierInputs>(initialFilterSupplierInputs);
+
+    console.log(inputsAfterSubmit, 'inputsAfterSubmit');
 
     const [isActiveSuppliers] = useState<boolean | null>(null);
 
@@ -96,9 +77,23 @@ const Suppliers = () => {
         }
     };
 
-    const onSubmit = async () => {
-        //
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setInputAfterSubmit(inputs);
     };
+
+    const suppliersReportsDataFilter = useMemo(() => {
+        if (!suppliersReportsData) return [];
+
+        return suppliersReportsData.filter((item) => {
+            if (
+                item.name.includes(inputsAfterSubmit.name) &&
+                item.mobileNumber.includes(inputsAfterSubmit.mobileNumber) &&
+                item.nationalCode.includes(inputsAfterSubmit.nationalCode)
+            )
+                return item;
+        });
+    }, [suppliersReportsData, inputsAfterSubmit]);
 
     // Change Page Title
     useEffect(() => {
@@ -123,87 +118,33 @@ const Suppliers = () => {
                 style={{ minWidth: '100%', minHeight: '0.1rem' }}
                 className='bg-brand-200/20 dark:bg-dark-brand-200/20'
             />
-            <form onSubmit={handleSubmit(onSubmit)} className='flex items-center gap-16 py-16'>
+            <form onSubmit={onSubmit} className='flex items-center gap-16 py-16'>
                 <div className='flex w-9/12 flex-1 items-center gap-16'>
-                    <div className='relative flex flex-1 flex-col gap-8'>
-                        <div className={clsx('input-group z-20 flex-1', errors.name && 'error')}>
-                            <input
-                                {...register('name')}
-                                className='w-full bg-transparent p-12'
-                                placeholder='نام تامین کننده'
-                                type='text'
-                            />
-                        </div>
-                        <div style={{ top: '5.4rem' }} className='absolute right-0 z-10'>
-                            <AnimatePresence>
-                                {errors.name && (
-                                    <motion.div
-                                        initial={{ y: -30 }}
-                                        animate={{ y: 0 }}
-                                        exit={{ y: -30 }}
-                                        className=' z-10 flex items-center gap-8 px-8 text-error-300 dark:text-dark-error-300'
-                                    >
-                                        <XFillSVG width='1.6rem' height='1.6rem' />
-                                        <span>{errors.name?.message}</span>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    </div>
-                    <div className='relative flex flex-1 flex-col gap-8'>
-                        <div className={clsx('input-group z-20 flex-1', errors.nationalCode && 'error')}>
-                            <input
-                                {...register('nationalCode')}
-                                className='w-full bg-transparent p-12'
-                                placeholder='کدملی'
-                                type='text'
-                            />
-                        </div>
-                        <div style={{ top: '5.4rem' }} className='absolute right-0 z-10'>
-                            <AnimatePresence>
-                                {errors.nationalCode && (
-                                    <motion.div
-                                        initial={{ y: -30 }}
-                                        animate={{ y: 0 }}
-                                        exit={{ y: -30 }}
-                                        className=' z-10 flex items-center gap-8 px-8 text-error-300 dark:text-dark-error-300'
-                                    >
-                                        <XFillSVG width='1.6rem' height='1.6rem' />
-                                        <span>{errors.nationalCode?.message}</span>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    </div>
-                    <div className='relative flex flex-1 flex-col gap-8'>
-                        <div className={clsx('input-group z-20 flex-1', errors.mobileNumber && 'error')}>
-                            <input
-                                {...register('mobileNumber')}
-                                className='w-full bg-transparent p-12'
-                                placeholder='شماره همراه'
-                                type='text'
-                            />
-                        </div>
-                        <div style={{ top: '5.4rem' }} className='absolute right-0 z-10'>
-                            <AnimatePresence>
-                                {errors.mobileNumber && (
-                                    <motion.div
-                                        initial={{ y: -30 }}
-                                        animate={{ y: 0 }}
-                                        exit={{ y: -30 }}
-                                        className=' z-10 flex items-center gap-8 px-8 text-error-300 dark:text-dark-error-300'
-                                    >
-                                        <XFillSVG width='1.6rem' height='1.6rem' />
-                                        <span>{errors.mobileNumber?.message}</span>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
-                    </div>
+                    <Input
+                        placeholder='نام تامین کننده'
+                        type='text'
+                        value={inputs.name}
+                        onChange={(v) => setFieldValue('name', v)}
+                    />
+                    <Input
+                        placeholder='کدملی'
+                        type='number'
+                        value={inputs.nationalCode}
+                        onChange={(v) => setFieldValue('nationalCode', v)}
+                    />
+                    <Input
+                        placeholder='شماره همراه'
+                        type='number'
+                        value={inputs.mobileNumber}
+                        onChange={(v) => setFieldValue('mobileNumber', v)}
+                    />
                 </div>
                 <div className='flex  w-3/12 items-center gap-8'>
                     <button
-                        onClick={() => reset()}
+                        onClick={() => {
+                            setFieldsValue(initialFilterSupplierInputs);
+                            setInputAfterSubmit(initialFilterSupplierInputs);
+                        }}
                         type='button'
                         className='rounded-md bg-background-900 p-12 px-16 text-text-100 dark:bg-dark-background-900 dark:text-dark-text-100 '
                     >
@@ -222,10 +163,13 @@ const Suppliers = () => {
                 style={{ minWidth: '100%', minHeight: '0.1rem' }}
                 className='bg-brand-200/20 dark:bg-dark-brand-200/20'
             />
-
-            <div className=' flex-1 rounded-sm p-8'>
-                <LightweightTable rowData={suppliersReportsData || []} columnDefs={columnDefs} />
-            </div>
+            {suppliersReportsDataFilter.length > 0 ? (
+                <div className=' flex-1 rounded-sm p-8'>
+                    <LightweightTable rowData={suppliersReportsDataFilter || []} columnDefs={columnDefs} />
+                </div>
+            ) : (
+                <NoData />
+            )}
         </div>
     );
 };

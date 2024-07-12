@@ -14,7 +14,7 @@ interface ModalProps extends IBaseModalConfiguration {
     top?: string | number;
     transparent?: boolean;
     onClose: () => void;
-    onMinimize: () => void;
+    onMinimize?: () => void;
 }
 
 interface ModalHeaderProps {
@@ -61,7 +61,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                         onClose();
                         removeListener();
                     } else {
-                        onMinimize();
+                        onMinimize?.();
                         removeListener();
                     }
                 }
@@ -150,9 +150,11 @@ const Header = ({ label, onClose, onClear, onMinimize }: ModalHeaderProps) => {
                     </button>
                 )}
 
-                <button onClick={onMinimize} type='button' className='text-icons-100 dark:text-dark-icons-100'>
-                    <MinimizeSVG width='2.2rem' height='2.2rem' />
-                </button>
+                {!!onMinimize && (
+                    <button onClick={onMinimize} type='button' className='text-icons-100 dark:text-dark-icons-100'>
+                        <MinimizeSVG width='2.2rem' height='2.2rem' />
+                    </button>
+                )}
 
                 <button onClick={onClose} type='button' className='text-icons-100 dark:text-dark-icons-100'>
                     <XSVG width='2.2rem' height='2.2rem' />

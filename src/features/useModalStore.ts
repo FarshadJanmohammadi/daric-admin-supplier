@@ -23,6 +23,9 @@ export interface IConfirmActivePanelModal extends IBaseModalConfiguration {
 export interface IOTPActivePanelModal extends IBaseModalConfiguration {
     //
 }
+export interface IConfirmLogoutModalModalPropsModal extends IBaseModalConfiguration {
+    //
+}
 
 interface IModalStore {
     // Add and Edit Supplier
@@ -48,6 +51,10 @@ interface IModalStore {
     // Auto Strategy
     autoStrategyModal: IAutoStrategyModal | null;
     toggleAutoStrategyModal: (state: IAutoStrategyModal | null) => void;
+
+    // Confirm Logout
+    confirmLogoutModal: IConfirmLogoutModalModalPropsModal | null;
+    toggleConfirmLogoutModal: (state: IConfirmLogoutModalModalPropsModal | null) => void;
 }
 
 const useModalStore = create<IModalStore>()((set) => ({
@@ -75,6 +82,11 @@ const useModalStore = create<IModalStore>()((set) => ({
     // Auto Strategy
     autoStrategyModal: null,
     toggleAutoStrategyModal: (state: IAutoStrategyModal | null) => set(() => ({ autoStrategyModal: state })),
+
+    //Confirm Logout
+    confirmLogoutModal: null,
+    toggleConfirmLogoutModal: (state: IConfirmLogoutModalModalPropsModal | null) =>
+        set(() => ({ confirmLogoutModal: state })),
 }));
 
 export default useModalStore;

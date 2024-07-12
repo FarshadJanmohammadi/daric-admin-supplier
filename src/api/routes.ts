@@ -13,6 +13,7 @@ const routes = {
     supplier: {
         add: createRoute('DASHBOARD_API', 'api/Seller/Admin/AddSeller'),
         getAll: createRoute('DASHBOARD_API', 'Admin/GetActivePanels'),
+        get: createRoute('DASHBOARD_API', 'get'),
     },
 
     auth: {
@@ -22,6 +23,10 @@ const routes = {
     marketLive: {
         getAll: 'https://apie.daric.gold/api/HedgeAlert/GetUnreadAlerts',
         pairList: 'https://apie.daric.gold/api/Dashboard/PairList',
+    },
+
+    order: {
+        addOrder: createRoute('DASHBOARD_API', 'Seller/AddOrder'),
     },
 };
 

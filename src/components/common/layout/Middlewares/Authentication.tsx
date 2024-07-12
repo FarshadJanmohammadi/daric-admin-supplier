@@ -30,9 +30,9 @@ const Authentication = ({ children }: AuthenticationProps) => {
 
     useEffect(() => {
         const cookieClientId = Cookies.get('client_id');
+        const mobileNumber = Cookies.get('mobile_number');
 
-        if (!cookieClientId && !location.pathname.includes('/auth')) {
-            console.log('HIiii');
+        if (!(cookieClientId && mobileNumber) && !location.pathname.includes('/auth')) {
             navigate(pagesRoutes.auth.logout);
         }
     }, []);

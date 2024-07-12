@@ -129,3 +129,13 @@ export const numFormatter = (num: number, formatNavigateNumber = true) => {
         return '−';
     }
 };
+
+export const numberWithoutComma = (value: string) => value.replace(/,/g, '');
+
+export const toISOStringWithoutChangeTime = (d: Date): string => {
+    const timezoneOffsetInMinutes = d.getTimezoneOffset() * 60000;
+    const utcDate = new Date(d.getTime() - timezoneOffsetInMinutes);
+
+    const isoString = utcDate.toISOString();
+    return isoString;
+};

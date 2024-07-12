@@ -4,20 +4,15 @@ import { forwardRef, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import Modal, { Header } from '../Modal';
 // import Form from './Form';
+import { initialOTPInput } from '@/constant';
 import { toEnglishNumber } from '@/utils/helpers';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Cookies from 'js-cookie';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import Button from '../../Button';
 
 interface IOTPActivePanelModalProps extends IBaseModalConfiguration {}
-
-interface IOTPInputs {
-    input1: string;
-    input2: string;
-    input3: string;
-    input4: string;
-}
 
 const OTPActivePanelModal = forwardRef<HTMLDivElement, IOTPActivePanelModalProps>((props, ref) => {
     const { t } = useTranslation();
@@ -34,13 +29,10 @@ const OTPActivePanelModal = forwardRef<HTMLDivElement, IOTPActivePanelModalProps
         })
         .required();
 
-    const { register, handleSubmit, watch, setFocus } = useForm<IOTPInputs>({
+    const { register, handleSubmit, getValues, watch, setFocus } = useForm<IOTPInputs>({
+        defaultValues: initialOTPInput,
         resolver: yupResolver(schema),
     });
-
-    // const [loading, setLoading] = useState(false);
-
-    // const [strategyMethod, setStrategyMethod] = useState<'manual' | 'auto'>('auto');
 
     const { otpActivePanelModal, toggleOtpActivePanelModal, toggleSelectStrategyModal } = useModalStore(
         (state) => state,
@@ -84,11 +76,9 @@ const OTPActivePanelModal = forwardRef<HTMLDivElement, IOTPActivePanelModalProps
     };
 
     const onKeyDown = (event: KeyboardEvent) => {
-        console.log(event);
         if (event.code === 'Backspace') {
             if (!watch('input4')) {
                 setFocus('input3');
-                // trigger('input2', { shouldFocus: true });
             }
             if (!watch('input3')) {
                 setFocus('input2');
@@ -99,7 +89,6 @@ const OTPActivePanelModal = forwardRef<HTMLDivElement, IOTPActivePanelModalProps
         } else {
             if (watch('input1')) {
                 setFocus('input2');
-                // trigger('input2', { shouldFocus: true });
             }
             if (watch('input2')) {
                 setFocus('input3');
@@ -109,6 +98,18 @@ const OTPActivePanelModal = forwardRef<HTMLDivElement, IOTPActivePanelModalProps
             }
         }
     };
+
+    useEffect(() => {
+        if (watch('input1')) {
+            setFocus('input2');
+        }
+        if (watch('input2')) {
+            setFocus('input3');
+        }
+        if (watch('input3')) {
+            setFocus('input4');
+        }
+    }, [getValues()]);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -152,7 +153,8 @@ const OTPActivePanelModal = forwardRef<HTMLDivElement, IOTPActivePanelModalProps
                                 <Trans
                                     i18nKey={'otp_page.send_otp'}
                                     values={{
-                                        mobileNumber: '+989122485266',
+                                        mobileNumber: Cookies.get('mobile_number') ?? '-',
+
                                         length: 4,
                                     }}
                                     components={{
@@ -164,54 +166,49 @@ const OTPActivePanelModal = forwardRef<HTMLDivElement, IOTPActivePanelModalProps
 
                         <form method='get' onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-32'>
                             <div className='flex items-center justify-center gap-16' dir='ltr'>
-                                <div className='input-group'>
-                                    <input
-                                        className=' h-48 w-48 !text-center text-3xl font-bold'
-                                        maxLength={1}
-                                        autoFocus
-                                        autoComplete='one-time-code'
-                                        type='tel'
-                                        inputMode='numeric'
-                                        tabIndex={1}
-                                        {...register('input1')}
-                                    />
-                                </div>
-                                <div className='input-group flex items-center justify-center'>
-                                    <input
-                                        className=' h-48 w-48  !text-center text-3xl font-bold'
-                                        dir='ltr'
-                                        maxLength={1}
-                                        autoComplete='off'
-                                        type='tel'
-                                        inputMode='numeric'
-                                        tabIndex={2}
-                                        {...register('input2')}
-                                    />
-                                </div>
-                                <div className='input-group flex items-center justify-center'>
-                                    <input
-                                        className=' h-48 w-48 !text-center text-3xl font-bold'
-                                        dir='ltr'
-                                        maxLength={1}
-                                        autoComplete='off'
-                                        type='tel'
-                                        inputMode='numeric'
-                                        tabIndex={3}
-                                        {...register('input3')}
-                                    />
-                                </div>
-                                <div className='input-group flex items-center justify-center'>
-                                    <input
-                                        className=' h-48 w-48 !text-center text-3xl font-bold'
-                                        dir='ltr'
-                                        maxLength={1}
-                                        autoComplete='off'
-                                        type='tel'
-                                        inputMode='numeric'
-                                        tabIndex={4}
-                                        {...register('input4')}
-                                    />
-                                </div>
+                                <input
+                                    className=' h-48 w-48 rounded-md border border-lines-200 bg-transparent !text-center text-3xl font-bold text-text-100 focus:border-brand-100 dark:border-dark-lines-200 dark:text-dark-text-100 dark:focus:border-dark-brand-100'
+                                    maxLength={1}
+                                    autoFocus
+                                    autoComplete='one-time-code'
+                                    type='tel'
+                                    inputMode='numeric'
+                                    tabIndex={1}
+                                    {...register('input1')}
+                                />
+
+                                <input
+                                    className=' h-48 w-48 rounded-md border border-lines-200 bg-transparent !text-center text-3xl font-bold text-text-100 focus:border-brand-100 dark:border-dark-lines-200 dark:text-dark-text-100 dark:focus:border-dark-brand-100'
+                                    dir='ltr'
+                                    maxLength={1}
+                                    autoComplete='off'
+                                    type='tel'
+                                    inputMode='numeric'
+                                    tabIndex={2}
+                                    {...register('input2')}
+                                />
+
+                                <input
+                                    className=' h-48 w-48 rounded-md border border-lines-200 bg-transparent !text-center text-3xl font-bold text-text-100 focus:border-brand-100 dark:border-dark-lines-200 dark:text-dark-text-100 dark:focus:border-dark-brand-100'
+                                    dir='ltr'
+                                    maxLength={1}
+                                    autoComplete='off'
+                                    type='tel'
+                                    inputMode='numeric'
+                                    tabIndex={3}
+                                    {...register('input3')}
+                                />
+
+                                <input
+                                    className=' h-48 w-48 rounded-md border border-lines-200 bg-transparent !text-center text-3xl font-bold text-text-100 focus:border-brand-100 dark:border-dark-lines-200 dark:text-dark-text-100 dark:focus:border-dark-brand-100'
+                                    dir='ltr'
+                                    maxLength={1}
+                                    autoComplete='off'
+                                    type='tel'
+                                    inputMode='numeric'
+                                    tabIndex={4}
+                                    {...register('input4')}
+                                />
                             </div>
 
                             <div className=' text-center text-base font-medium text-text-200 dark:text-dark-text-200'>

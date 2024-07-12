@@ -1,49 +1,35 @@
+import { axiosBase } from '@/api/axios';
+import apiRoutes from '@/api/routes';
 import { initialManualStrategyInputs } from '@/constant';
 import useModalStore from '@/features/useModalStore';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { forwardRef, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useInputs } from '@/hooks';
+import { errorMessage, toISOStringWithoutChangeTime } from '@/utils/helpers';
+import clsx from 'clsx';
+import { FormEvent, forwardRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
+import { toast } from 'react-toastify';
 import Modal, { Header } from '../Modal';
 import Form from './Form';
-// import Form from './Form';
 
 interface IManualStrategyModalProps extends IBaseModalConfiguration {}
 
 const ManualStrategyModal = forwardRef<HTMLDivElement, IManualStrategyModalProps>((props, ref) => {
     const { t } = useTranslation();
 
-    const [loading] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const [side, setSide] = useState<'buy' | 'sell'>('buy');
+
+    // const mobileNumber = Cookies.get('mobileNumber');
+
+    // const { data: supplierInformationData } = useInformationQuery({
+    //     queryKey: ['supplierInformation', mobileNumber],
+    // });
 
     const { manualStrategyModal, toggleManualStrategyModal } = useModalStore((state) => state);
 
-    const schema = yup
-        .object({
-            buyPrice: yup.string().required(t('validation.this_field_is_required', { type: t('form.buy_price') })),
-            sellPrice: yup.string().required(t('validation.this_field_is_required', { type: t('form.sell_price') })),
-            buyVolume: yup.string().required(t('validation.this_field_is_required', { type: t('form.buy_volume') })),
-            sellVolume: yup.string().required(t('validation.this_field_is_required', { type: t('form.sell_volume') })),
-            amountAlert: yup
-                .string()
-                .required(t('validation.this_field_is_required', { type: t('form.amount_alert') })),
-        })
-        .required();
-
-    const {
-        register,
-        // reset,
-        handleSubmit,
-        formState: { errors },
-        watch,
-        setValue,
-        trigger,
-        setFocus,
-        control,
-    } = useForm<Strategy.IManualStrategyInputs>({
-        resolver: yupResolver(schema),
-        defaultValues: initialManualStrategyInputs,
-    });
+    const { inputs, setFieldValue, setFieldsValue } =
+        useInputs<Strategy.IManualStrategyInputs>(initialManualStrategyInputs);
 
     const onCloseModal = () => {
         toggleManualStrategyModal(null);
@@ -53,30 +39,56 @@ const ManualStrategyModal = forwardRef<HTMLDivElement, IManualStrategyModalProps
         onCloseModal();
     };
 
-    const onSubmit: SubmitHandler<Strategy.IManualStrategyInputs> = async () => {
+    const TABS: {
+        id: 'buy' | 'sell';
+        title: string;
+    }[] = [
+        {
+            id: 'buy',
+            title: 'خرید',
+        },
+
+        {
+            id: 'sell',
+            title: 'فروش',
+        },
+    ];
+
+    const onChangeTab = (id: 'buy' | 'sell') => {
+        setSide(id);
+    };
+
+    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         try {
-            // setLoading(true);
-            // const response = await axiosBase.post<ServerResponse<IAddSupplier>>(apiRoutes.supplier.add, {
-            //     name: supplierName,
-            //     nationalCode: toEnglishNumber(nationalCode),
-            //     mobileNumber: toEnglishNumber(mobileNumber),
-            //     activeInActiveKind: active.value === 'active' ? true : false,
-            //     status: status.value === 'approve' ? true : false,
-            //     guarantee: Number(toEnglishNumber(guarantee)),
-            //     cardNumber: toEnglishNumber(cardNumber),
-            // });
-            // const data = response.data;
-            // if (response.status !== 200 || !data.isSuccess) {
-            //     toast.error(data.message);
-            //     if (!data.validationErrors) return;
-            //     throw new Error(errorMessage(data.validationErrors[0].errors[0]));
-            // }
-            // toast.success(data.message);
-            // setAddSupplierModal({});
+            setLoading(true);
+            const response = await axiosBase.post<ServerResponse<IAddSupplier>>(apiRoutes.order.addOrder, {
+                sellerID: 0,
+                kind: side === 'buy' ? 1 : 2,
+                active: true,
+                dateFrom: new Date().getTime(),
+                dateTo: toISOStringWithoutChangeTime(new Date(inputs.validity)),
+                amount: inputs.price,
+                sellSpread: 0,
+                buySpread: 0,
+                volume: inputs.volume,
+                warningVolume: 0,
+            });
+            const data = response.data;
+
+            if (response.status !== 200 || !data.isSuccess) {
+                toast.error(data.message);
+                if (!data.validationErrors) return;
+                throw new Error(errorMessage(data.validationErrors[0].errors[0]));
+            }
+
+            toast.success(data.message);
+
+            onCloseModal();
         } catch (e) {
-            // setLoading(false);
+            setLoading(false);
         } finally {
-            // setLoading(false);
+            setLoading(false);
         }
     };
 
@@ -93,19 +105,38 @@ const ManualStrategyModal = forwardRef<HTMLDivElement, IManualStrategyModalProps
             <div className='flex flex-col'>
                 <Header label={t('manual_strategy_modal.title')} onClose={onCloseModal} onMinimize={onMinimize} />
 
-                <Form
-                    onSubmit={onSubmit}
-                    handleSubmit={handleSubmit}
-                    register={register}
-                    onCloseModal={onCloseModal}
-                    errors={errors}
-                    watch={watch}
-                    setValue={setValue}
-                    setFocus={setFocus}
-                    trigger={trigger}
-                    control={control}
-                    loading={loading}
-                />
+                <div className='flex flex-col bg-background-200 dark:bg-dark-background-200'>
+                    <div className='flex items-center gap-8  p-16'>
+                        {TABS.map((tab, index) => (
+                            <button
+                                key={index}
+                                className={clsx(
+                                    'button-tab flex-1 py-12 text-lg font-medium',
+                                    {
+                                        'button-tab-active': tab.id === side,
+                                    },
+                                    {
+                                        'text-success-400 dark:text-dark-success-400': tab.id === 'buy',
+                                        'text-error-300 dark:text-dark-error-300': tab.id === 'sell',
+                                    },
+                                )}
+                                onClick={() => onChangeTab(tab.id)}
+                            >
+                                {tab.title}
+                            </button>
+                        ))}
+                    </div>
+
+                    <Form
+                        inputs={inputs}
+                        setFieldValue={setFieldValue}
+                        setFieldsValue={setFieldsValue}
+                        onSubmit={onSubmit}
+                        onCloseModal={onCloseModal}
+                        loading={loading}
+                        side={side}
+                    />
+                </div>
             </div>
         </Modal>
     );
